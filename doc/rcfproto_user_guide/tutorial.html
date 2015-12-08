@@ -1,0 +1,2043 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Tutorial</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="../index.html" title="RCFProto User Guide">
+<link rel="up" href="../index.html" title="RCFProto User Guide">
+<link rel="prev" href="Intro.html" title="Introduction">
+<link rel="next" href="AppendixBuilding.html" title="Appendix - Building RCFProto">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="spirit-nav">
+<a accesskey="p" href="Intro.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="AppendixBuilding.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="rcfproto_user_guide.tutorial"></a><a class="link" href="tutorial.html" title="Tutorial">Tutorial</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example">RCFProto
+      client/server example</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.client_configuration">Client
+      configuration</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.server_configuration">Server
+      configuration</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.asynchronous_remote_calls">Asynchronous
+      remote calls</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transports">Transports</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols">Transport
+      protocols</a></span></dt>
+</dl></div>
+<p>
+      This tutorial provides an overview of writing RCFProto servers and clients.
+    </p>
+<p>
+      For fully functional RCFProto demo servers and clients, in all four supported
+      languages, complete with build instructions for common toolsets, please refer
+      to the demo directories in the RCFProto distributions.
+    </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example" title="RCFProto client/server example">RCFProto
+      client/server example</a>
+</h3></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.defining_a_protocol_buffers_interface">Defining
+        a Protocol Buffers interface</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c___server">C++
+        server</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c___client">C++
+        client</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_">C#</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.java">Java</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.python">Python</a></span></dt>
+</dl></div>
+<p>
+        Let's start with an example of a RCFProto client communicating with a RCFProto
+        server.
+      </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.defining_a_protocol_buffers_interface"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.defining_a_protocol_buffers_interface" title="Defining a Protocol Buffers interface">Defining
+        a Protocol Buffers interface</a>
+</h4></div></div></div>
+<p>
+          The first thing we will need is a Protocol Buffers interface, to describe
+          the interaction between the client and the server.
+        </p>
+<p>
+          Protocol Buffers provides a simple language for defining message types
+          and services. We won't cover the details of this language here, as it's
+          features are well documented on the <a href="https://code.google.com/p/protobuf/" target="_top">Protocol
+          Buffers website</a>. For the purposes of this tutorial, we want to
+          define a service with a single method, that executes a search request and
+          returns search hits.
+        </p>
+<p>
+          Protocol Buffers messages and services are defined in .proto files. The
+          following file, named <code class="computeroutput"><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">proto</span></code>,
+          defines a service named <code class="computeroutput"><span class="identifier">SearchService</span></code>,
+          with associated <code class="computeroutput"><span class="identifier">SearchRequest</span></code>
+          and <code class="computeroutput"><span class="identifier">SearchResponse</span></code> message
+          types :
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Tutorial.proto
+</span>
+<span class="comment">// Enable generation of Protocol Buffers RPC services.
+</span><span class="identifier">option</span> <span class="identifier">cc_generic_services</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>
+<span class="identifier">option</span> <span class="identifier">java_generic_services</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>
+<span class="identifier">option</span> <span class="identifier">py_generic_services</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>
+
+<span class="comment">// Defining a search service.
+</span>
+<span class="comment">// Define a request.
+</span>
+<span class="identifier">message</span> <span class="identifier">SearchRequest</span> <span class="special">{</span>
+  <span class="identifier">required</span> <span class="identifier">string</span> <span class="identifier">query</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span>
+  <span class="identifier">optional</span> <span class="identifier">int32</span> <span class="identifier">page_number</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
+  <span class="identifier">optional</span> <span class="identifier">int32</span> <span class="identifier">result_per_page</span> <span class="special">=</span> <span class="number">3</span> <span class="special">[</span><span class="keyword">default</span> <span class="special">=</span> <span class="number">10</span><span class="special">];</span>
+  <span class="keyword">enum</span> <span class="identifier">Corpus</span> <span class="special">{</span>
+    <span class="identifier">UNIVERSAL</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="identifier">WEB</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span>
+    <span class="identifier">IMAGES</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
+    <span class="identifier">LOCAL</span> <span class="special">=</span> <span class="number">3</span><span class="special">;</span>
+    <span class="identifier">NEWS</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span>
+    <span class="identifier">PRODUCTS</span> <span class="special">=</span> <span class="number">5</span><span class="special">;</span>
+    <span class="identifier">VIDEO</span> <span class="special">=</span> <span class="number">6</span><span class="special">;</span>
+  <span class="special">}</span>
+  <span class="identifier">optional</span> <span class="identifier">Corpus</span> <span class="identifier">corpus</span> <span class="special">=</span> <span class="number">4</span> <span class="special">[</span><span class="keyword">default</span> <span class="special">=</span> <span class="identifier">UNIVERSAL</span><span class="special">];</span>
+<span class="special">}</span>
+
+<span class="comment">// Define a response
+</span>
+<span class="identifier">message</span> <span class="identifier">SearchResponse</span> <span class="special">{</span>
+  <span class="identifier">repeated</span> <span class="identifier">group</span> <span class="identifier">Result</span> <span class="special">=</span> <span class="number">1</span> <span class="special">{</span>
+    <span class="identifier">required</span> <span class="identifier">string</span> <span class="identifier">url</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
+    <span class="identifier">optional</span> <span class="identifier">string</span> <span class="identifier">title</span> <span class="special">=</span> <span class="number">3</span><span class="special">;</span>
+    <span class="identifier">repeated</span> <span class="identifier">string</span> <span class="identifier">snippets</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span>
+  <span class="special">}</span>
+<span class="special">}</span>
+
+<span class="comment">// Define the service.
+</span>
+<span class="identifier">service</span> <span class="identifier">SearchService</span> 
+<span class="special">{</span>
+  <span class="identifier">rpc</span> <span class="identifier">Search</span> <span class="special">(</span><span class="identifier">SearchRequest</span><span class="special">)</span> <span class="identifier">returns</span> <span class="special">(</span><span class="identifier">SearchResponse</span><span class="special">);</span>
+<span class="special">}</span>
+
+</pre>
+<p>
+        </p>
+<p>
+          To make use of this interface in our program, we first need to use the
+          Protocol Buffers compiler, <code class="computeroutput"><span class="identifier">protoc</span></code>,
+          to generate the source code corresponding to the interface. This example
+          will be in C++, so we instruct <code class="computeroutput"><span class="identifier">protoc</span></code>
+          to generate C++ source code:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">protoc</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">proto</span> <span class="special">--</span><span class="identifier">cpp_out</span><span class="special">=.</span>
+</pre>
+<p>
+        </p>
+<p>
+          This will produce two files, <code class="computeroutput"><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">pb</span><span class="special">.</span><span class="identifier">cc</span></code> and <code class="computeroutput"><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">pb</span><span class="special">.</span><span class="identifier">h</span></code>, in the same directory as <code class="computeroutput"><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">proto</span></code>. <code class="computeroutput"><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">pb</span><span class="special">.</span><span class="identifier">h</span></code> provides C++ definitions of message
+          and service types, and will be included into our source code. <code class="computeroutput"><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">pb</span><span class="special">.</span><span class="identifier">cc</span></code>
+          provides the corresponding source code for the message and service types,
+          and needs to be compiled into both the server and the client.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.c___server"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c___server" title="C++ server">C++
+        server</a>
+</h4></div></div></div>
+<p>
+          Here is the complete source code for a C++ RCFProto server, implementing
+          the service we have defined:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="comment">// Include protoc-generated header.
+</span><span class="preprocessor">#include</span> <span class="string">"../bin/Tutorial.pb.h"</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">google</span><span class="special">::</span><span class="identifier">protobuf</span><span class="special">;</span>
+
+<span class="comment">// SearchService implementation.
+</span><span class="keyword">class</span> <span class="identifier">SearchServiceImpl</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">SearchService</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+    <span class="comment">// Search() method implementation.
+</span>    <span class="keyword">void</span> <span class="identifier">Search</span><span class="special">(</span>
+        <span class="identifier">RpcController</span> <span class="special">*</span>                 <span class="identifier">controller</span><span class="special">,</span>
+        <span class="keyword">const</span> <span class="identifier">SearchRequest</span> <span class="special">*</span>           <span class="identifier">request</span><span class="special">,</span>
+        <span class="identifier">SearchResponse</span> <span class="special">*</span>                <span class="identifier">response</span><span class="special">,</span>
+        <span class="identifier">Closure</span> <span class="special">*</span>                       <span class="identifier">done</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// Fill in the response.
+</span>
+        <span class="identifier">SearchResponse_Result</span> <span class="special">*</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">response</span><span class="special">-&gt;</span><span class="identifier">add_result</span><span class="special">();</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_title</span><span class="special">(</span><span class="string">"First result"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_url</span><span class="special">(</span><span class="string">"http://acme.org/"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">add_snippets</span><span class="special">(</span><span class="string">"A snippet from acme.org."</span><span class="special">);</span>
+
+        <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">response</span><span class="special">-&gt;</span><span class="identifier">add_result</span><span class="special">();</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_title</span><span class="special">(</span><span class="string">"Second result"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_url</span><span class="special">(</span><span class="string">"http://acme.org/abc"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">add_snippets</span><span class="special">(</span><span class="string">"Another snippet from acme.org."</span><span class="special">);</span>
+
+        <span class="comment">// Send response back to the client.
+</span>        <span class="identifier">done</span><span class="special">-&gt;</span><span class="identifier">Run</span><span class="special">();</span>
+    <span class="special">}</span>
+
+<span class="special">};</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="keyword">try</span>
+    <span class="special">{</span>
+        <span class="comment">// Initialize RCFProto.
+</span>        <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">init</span><span class="special">();</span>
+
+        <span class="comment">// Create server.
+</span>        <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+        <span class="comment">// Bind Protobuf service.
+</span>        <span class="identifier">SearchServiceImpl</span> <span class="identifier">searchServiceImpl</span><span class="special">;</span>
+        <span class="identifier">server</span><span class="special">.</span><span class="identifier">bindService</span><span class="special">(</span><span class="identifier">searchServiceImpl</span><span class="special">);</span>
+
+        <span class="comment">// Start the server.
+</span>        <span class="identifier">server</span><span class="special">.</span><span class="identifier">start</span><span class="special">();</span>
+        
+        <span class="comment">// Wait for clients.
+</span>        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Press Enter to exit."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span><span class="special">.</span><span class="identifier">get</span><span class="special">();</span>
+    <span class="special">}</span>
+    <span class="keyword">catch</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Exception</span> <span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"RCF::Exception: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">getErrorString</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="keyword">return</span> <span class="number">1</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Let's now step through this line by line.
+        </p>
+<p>
+          We need to include RCFProto headers:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+        </p>
+<p>
+          We need to include the generated headers for the Protocol Buffers message
+          and service definitions:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Include protoc-generated header.
+</span><span class="preprocessor">#include</span> <span class="string">"../bin/Tutorial.pb.h"</span>
+</pre>
+<p>
+        </p>
+<p>
+          <code class="computeroutput"><span class="identifier">SearchService</span></code> is an abstract
+          interface class generated by Protocol Buffers. Our implementation must
+          derive from this class, and implement the <code class="computeroutput"><span class="identifier">Search</span><span class="special">()</span></code> method:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// SearchService implementation.
+</span><span class="keyword">class</span> <span class="identifier">SearchServiceImpl</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">SearchService</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+    <span class="comment">// Search() method implementation.
+</span>    <span class="keyword">void</span> <span class="identifier">Search</span><span class="special">(</span>
+        <span class="identifier">RpcController</span> <span class="special">*</span>                 <span class="identifier">controller</span><span class="special">,</span>
+        <span class="keyword">const</span> <span class="identifier">SearchRequest</span> <span class="special">*</span>           <span class="identifier">request</span><span class="special">,</span>
+        <span class="identifier">SearchResponse</span> <span class="special">*</span>                <span class="identifier">response</span><span class="special">,</span>
+        <span class="identifier">Closure</span> <span class="special">*</span>                       <span class="identifier">done</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// Fill in the response.
+</span>
+        <span class="identifier">SearchResponse_Result</span> <span class="special">*</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">response</span><span class="special">-&gt;</span><span class="identifier">add_result</span><span class="special">();</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_title</span><span class="special">(</span><span class="string">"First result"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_url</span><span class="special">(</span><span class="string">"http://acme.org/"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">add_snippets</span><span class="special">(</span><span class="string">"A snippet from acme.org."</span><span class="special">);</span>
+
+        <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">response</span><span class="special">-&gt;</span><span class="identifier">add_result</span><span class="special">();</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_title</span><span class="special">(</span><span class="string">"Second result"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">set_url</span><span class="special">(</span><span class="string">"http://acme.org/abc"</span><span class="special">);</span>
+        <span class="identifier">result</span><span class="special">-&gt;</span><span class="identifier">add_snippets</span><span class="special">(</span><span class="string">"Another snippet from acme.org."</span><span class="special">);</span>
+
+        <span class="comment">// Send response back to the client.
+</span>        <span class="identifier">done</span><span class="special">-&gt;</span><span class="identifier">Run</span><span class="special">();</span>
+    <span class="special">}</span>
+
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          <code class="computeroutput"><span class="identifier">RpcController</span></code> and <code class="computeroutput"><span class="identifier">Closure</span></code> are classes from Protocol Buffers,
+          that allow us to control the server-side execution of a remote call. For
+          a simple implementation like this one, it's enough to call <code class="computeroutput"><span class="identifier">Closure</span><span class="special">::</span><span class="identifier">Run</span><span class="special">()</span></code>
+          at the bottom of the implementation function, to signal that the response
+          is ready to be sent back to the client:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Send response back to the client.
+</span><span class="identifier">done</span><span class="special">-&gt;</span><span class="identifier">Run</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+<p>
+          In <code class="computeroutput"><span class="identifier">main</span><span class="special">()</span></code>,
+          we need to initialize RCFProto:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Initialize RCFProto.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">init</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+<p>
+          We create the server, and pass in the endpoint we want to the server to
+          listen on:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Create server.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          We have provided <code class="computeroutput"><span class="number">0.0</span><span class="special">.</span><span class="number">0.0</span></code> as the IP address of the TCP endpoint,
+          in order to listen on all available network interfaces of the local system.
+        </p>
+<p>
+          We bind our <code class="computeroutput"><span class="identifier">SearchService</span></code>
+          implementation to the server:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Bind Protobuf service.
+</span><span class="identifier">SearchServiceImpl</span> <span class="identifier">searchServiceImpl</span><span class="special">;</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">bindService</span><span class="special">(</span><span class="identifier">searchServiceImpl</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Finally, we start the server and wait for clients to call in:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Start the server.
+</span><span class="identifier">server</span><span class="special">.</span><span class="identifier">start</span><span class="special">();</span>
+
+<span class="comment">// Wait for clients.
+</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Press Enter to exit."</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cin</span><span class="special">.</span><span class="identifier">get</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.c___client"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c___client" title="C++ client">C++
+        client</a>
+</h4></div></div></div>
+<p>
+          Here is the complete C++ code for a RCFProto client calling the server:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="comment">// Include protoc-generated header.
+</span><span class="preprocessor">#include</span> <span class="string">"../bin/Tutorial.pb.h"</span>
+
+<span class="comment">// TextFormat::PrintToString()
+</span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">google</span><span class="special">/</span><span class="identifier">protobuf</span><span class="special">/</span><span class="identifier">text_format</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">google</span><span class="special">::</span><span class="identifier">protobuf</span><span class="special">;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="keyword">try</span>
+    <span class="special">{</span>
+        <span class="comment">// Initialize RCFProto.
+</span>        <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">init</span><span class="special">();</span>
+
+        <span class="comment">// Create request object.
+</span>        <span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">;</span>
+        <span class="identifier">request</span><span class="special">.</span><span class="identifier">set_query</span><span class="special">(</span><span class="string">"something to search for"</span><span class="special">);</span>
+        <span class="identifier">request</span><span class="special">.</span><span class="identifier">set_result_per_page</span><span class="special">(</span><span class="number">10</span><span class="special">);</span>
+        <span class="identifier">request</span><span class="special">.</span><span class="identifier">set_page_number</span><span class="special">(</span><span class="number">0</span><span class="special">);</span>
+        <span class="identifier">request</span><span class="special">.</span><span class="identifier">set_corpus</span><span class="special">(</span><span class="identifier">SearchRequest_Corpus_NEWS</span><span class="special">);</span>
+
+        <span class="comment">// Create response object.
+</span>        <span class="identifier">SearchResponse</span> <span class="identifier">response</span><span class="special">;</span>
+
+        <span class="comment">// Create channel.
+</span>        <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+        <span class="comment">// Create service stub.
+</span>        <span class="identifier">SearchService</span><span class="special">::</span><span class="identifier">Stub</span> <span class="identifier">stub</span><span class="special">(&amp;</span><span class="identifier">channel</span><span class="special">);</span>
+
+        <span class="comment">// Print out request.
+</span>        <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">strRequest</span><span class="special">;</span>
+        <span class="identifier">TextFormat</span><span class="special">::</span><span class="identifier">PrintToString</span><span class="special">(</span><span class="identifier">request</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">strRequest</span><span class="special">);</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Sending request:"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">strRequest</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+        <span class="comment">// Make a synchronous remote call to server.
+</span>        <span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(</span><span class="identifier">NULL</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">request</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">response</span><span class="special">,</span> <span class="identifier">NULL</span><span class="special">);</span>
+        
+        <span class="comment">// Print out response.
+</span>        <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">strResponse</span><span class="special">;</span>
+        <span class="identifier">TextFormat</span><span class="special">::</span><span class="identifier">PrintToString</span><span class="special">(</span><span class="identifier">response</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">strResponse</span><span class="special">);</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Received response:"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">strResponse</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+    <span class="keyword">catch</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Exception</span> <span class="special">&amp;</span> <span class="identifier">e</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"RCF::Exception: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">getErrorString</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="keyword">return</span> <span class="number">1</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Let's step through this line by line.
+        </p>
+<p>
+          We need to include the RCFProto headers:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+        </p>
+<p>
+          We need to include the generated Protocol Buffers headers:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Include protoc-generated header.
+</span><span class="preprocessor">#include</span> <span class="string">"../bin/Tutorial.pb.h"</span>
+</pre>
+<p>
+        </p>
+<p>
+          We are also including the Protocol Buffers header for the <code class="computeroutput"><span class="identifier">TextFormat</span></code> class, in order to be able
+          to convert Protocol Buffers messages to text format, for log output:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// TextFormat::PrintToString()
+</span><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">google</span><span class="special">/</span><span class="identifier">protobuf</span><span class="special">/</span><span class="identifier">text_format</span><span class="special">.</span><span class="identifier">h</span><span class="special">&gt;</span>
+</pre>
+<p>
+        </p>
+<p>
+          In <code class="computeroutput"><span class="identifier">main</span><span class="special">()</span></code>,
+          we start by initializing RCFProto:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Initialize RCFProto.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">init</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+<p>
+          Protocol Buffers has defined the <code class="computeroutput"><span class="identifier">SearchRequest</span></code>
+          and <code class="computeroutput"><span class="identifier">SearchResponse</span></code> classes
+          for us. We create a <code class="computeroutput"><span class="identifier">SearchRequest</span></code>
+          object:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Create request object.
+</span><span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">;</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">set_query</span><span class="special">(</span><span class="string">"something to search for"</span><span class="special">);</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">set_result_per_page</span><span class="special">(</span><span class="number">10</span><span class="special">);</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">set_page_number</span><span class="special">(</span><span class="number">0</span><span class="special">);</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">set_corpus</span><span class="special">(</span><span class="identifier">SearchRequest_Corpus_NEWS</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          , as well as a <code class="computeroutput"><span class="identifier">SearchResponse</span></code>
+          object:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Create response object.
+</span><span class="identifier">SearchResponse</span> <span class="identifier">response</span><span class="special">;</span>
+</pre>
+<p>
+        </p>
+<p>
+          Before we can send the request, we need to create a <code class="computeroutput"><span class="identifier">RcfProtoChannel</span></code>
+          to send it over. In this case the server is listening on TCP port 50001
+          on the local network interface.
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Create channel.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Protocol Buffers has generated a service stub type, which we instantiate:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Create service stub.
+</span><span class="identifier">SearchService</span><span class="special">::</span><span class="identifier">Stub</span> <span class="identifier">stub</span><span class="special">(&amp;</span><span class="identifier">channel</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Let's print the request:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Print out request.
+</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">strRequest</span><span class="special">;</span>
+<span class="identifier">TextFormat</span><span class="special">::</span><span class="identifier">PrintToString</span><span class="special">(</span><span class="identifier">request</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">strRequest</span><span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Sending request:"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">strRequest</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+        </p>
+<p>
+          Protocol Buffers generates a service stub that can function both synchronously
+          and asynchronously. In this case we are making a synchronous remote call,
+          so we call <code class="computeroutput"><span class="identifier">Search</span><span class="special">()</span></code>
+          with <code class="computeroutput"><span class="identifier">NULL</span></code> as the first
+          and fourth parameter:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Make a synchronous remote call to server.
+</span><span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(</span><span class="identifier">NULL</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">request</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">response</span><span class="special">,</span> <span class="identifier">NULL</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          When the call to <code class="computeroutput"><span class="identifier">Search</span><span class="special">()</span></code> returns, the server response is in the
+          <code class="computeroutput"><span class="identifier">response</span></code> variable. Let's
+          print it out:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Print out response.
+</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">strResponse</span><span class="special">;</span>
+<span class="identifier">TextFormat</span><span class="special">::</span><span class="identifier">PrintToString</span><span class="special">(</span><span class="identifier">response</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">strResponse</span><span class="special">);</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Received response:"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">strResponse</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+</pre>
+<p>
+        </p>
+</div>
+<p>
+        The RCFProto bindings for C#, Java and Python are very similar to the C++
+        bindings. Generally any RCFProto class or method available in C++, will be
+        available in C#, Java and Python, with the same spelling, but possibly a
+        different leading case.
+      </p>
+<p>
+        The following sections provide line-by-line translations of the client and
+        server example above, in C#, Java and Python.
+      </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_" title="C#">C#</a>
+</h4></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_.c__server">C#
+          server</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_.c__client">C#
+          client</a></span></dt>
+</dl></div>
+<p>
+          To use RCFProto in C#, you need to reference the <code class="computeroutput"><span class="identifier">RCFProto_NET</span><span class="special">.</span><span class="identifier">dll</span></code>
+          and <code class="computeroutput"><span class="identifier">Google</span><span class="special">.</span><span class="identifier">ProtocolBuffers</span><span class="special">.</span><span class="identifier">dll</span></code> assemblies. RCFProto C# classes are
+          defined in the <code class="computeroutput"><span class="identifier">DeltaVSoft</span><span class="special">.</span><span class="identifier">RCFProto</span></code>
+          namespace.
+        </p>
+<p>
+          To generate C# code for your message and service types, use <code class="computeroutput"><span class="identifier">ProtoGen</span><span class="special">.</span><span class="identifier">exe</span></code>:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">ProtoGen</span><span class="special">.</span><span class="identifier">exe</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">proto</span> <span class="special">-</span><span class="identifier">service_generator_type</span><span class="special">=</span><span class="identifier">GENERIC</span>
+</pre>
+<p>
+        </p>
+<p>
+          For more information on building C# applications, see <a class="link" href="AppendixBuilding.html" title="Appendix - Building RCFProto">Appendix
+          - Building</a>.
+        </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_.c__server"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_.c__server" title="C# server">C#
+          server</a>
+</h5></div></div></div>
+<p>
+            
+</p>
+<pre class="programlisting"><span class="keyword">using</span> <span class="identifier">DeltaVSoft</span><span class="special">.</span><span class="identifier">RCFProto</span><span class="special">;</span>
+
+<span class="comment">// SearchService implementation.
+</span><span class="keyword">class</span> <span class="identifier">SearchServiceImpl</span> <span class="special">:</span> <span class="identifier">SearchService</span>
+<span class="special">{</span>
+    <span class="keyword">public</span> <span class="identifier">override</span> <span class="keyword">void</span> <span class="identifier">Search</span><span class="special">(</span>
+        <span class="identifier">Google</span><span class="special">.</span><span class="identifier">ProtocolBuffers</span><span class="special">.</span><span class="identifier">IRpcController</span> <span class="identifier">controller</span><span class="special">,</span>
+        <span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">,</span>
+        <span class="identifier">System</span><span class="special">.</span><span class="identifier">Action</span><span class="special">&lt;</span><span class="identifier">SearchResponse</span><span class="special">&gt;</span> <span class="identifier">done</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// Build the response.
+</span>
+        <span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Builder</span> <span class="identifier">responseBuilder</span> <span class="special">=</span> <span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">CreateBuilder</span><span class="special">();</span>
+        
+        <span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Types</span><span class="special">.</span><span class="identifier">Result</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Types</span><span class="special">.</span><span class="identifier">Result</span><span class="special">.</span><span class="identifier">CreateBuilder</span><span class="special">()</span>
+            <span class="special">.</span><span class="identifier">SetTitle</span><span class="special">(</span><span class="string">"First result"</span><span class="special">)</span>
+            <span class="special">.</span><span class="identifier">SetUrl</span><span class="special">(</span><span class="string">"http://acme.org/"</span><span class="special">)</span>
+            <span class="special">.</span><span class="identifier">Build</span><span class="special">();</span>
+
+        <span class="identifier">responseBuilder</span><span class="special">.</span><span class="identifier">AddResult</span><span class="special">(</span><span class="identifier">result</span><span class="special">);</span>
+
+        <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Types</span><span class="special">.</span><span class="identifier">Result</span><span class="special">.</span><span class="identifier">CreateBuilder</span><span class="special">()</span>
+            <span class="special">.</span><span class="identifier">SetTitle</span><span class="special">(</span><span class="string">"Second result"</span><span class="special">)</span>
+            <span class="special">.</span><span class="identifier">SetUrl</span><span class="special">(</span><span class="string">"http://acme.org/abc"</span><span class="special">)</span>
+            <span class="special">.</span><span class="identifier">AddSnippets</span><span class="special">(</span><span class="string">"Another snippet from acme.org."</span><span class="special">)</span>
+            <span class="special">.</span><span class="identifier">Build</span><span class="special">();</span>
+
+        <span class="identifier">responseBuilder</span><span class="special">.</span><span class="identifier">AddResult</span><span class="special">(</span><span class="identifier">result</span><span class="special">);</span>
+
+        <span class="identifier">SearchResponse</span> <span class="identifier">response</span> <span class="special">=</span> <span class="identifier">responseBuilder</span><span class="special">.</span><span class="identifier">Build</span><span class="special">();</span>
+
+        <span class="comment">// Send response back to the client.
+</span>        <span class="identifier">done</span><span class="special">(</span><span class="identifier">response</span><span class="special">);</span>
+    <span class="special">}</span>
+
+<span class="special">}</span>
+
+<span class="keyword">class</span> <span class="identifier">TutorialServer</span>
+<span class="special">{</span>
+    <span class="keyword">static</span> <span class="keyword">int</span> <span class="identifier">Main</span><span class="special">(</span><span class="identifier">string</span><span class="special">[]</span> <span class="identifier">args</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">try</span>
+        <span class="special">{</span>
+            <span class="comment">// Initialize RCFProto.
+</span>            <span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">Init</span><span class="special">();</span>
+
+            <span class="comment">// Create server.
+</span>            <span class="identifier">RcfProtoServer</span> <span class="identifier">server</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">RcfProtoServer</span><span class="special">(</span><span class="keyword">new</span> <span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">));</span>
+
+            <span class="comment">// Bind Protobuf service.
+</span>            <span class="identifier">SearchServiceImpl</span> <span class="identifier">searchServiceImpl</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">SearchServiceImpl</span><span class="special">();</span>
+            <span class="identifier">server</span><span class="special">.</span><span class="identifier">BindService</span><span class="special">(</span><span class="identifier">searchServiceImpl</span><span class="special">);</span>
+
+            <span class="comment">// Start the server.
+</span>            <span class="identifier">server</span><span class="special">.</span><span class="identifier">Start</span><span class="special">();</span>
+
+            <span class="comment">// Wait for clients.
+</span>            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="string">"Press Enter to exit."</span><span class="special">);</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">ReadLine</span><span class="special">();</span>
+        <span class="special">}</span>
+        <span class="keyword">catch</span> <span class="special">(</span><span class="identifier">System</span><span class="special">.</span><span class="identifier">Exception</span> <span class="identifier">e</span><span class="special">)</span>
+        <span class="special">{</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="string">"Exception: "</span> <span class="special">+</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">Message</span><span class="special">);</span>
+            <span class="keyword">return</span> <span class="number">1</span><span class="special">;</span>
+        <span class="special">}</span>
+
+        <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+</pre>
+<p>
+          </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_.c__client"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.c_.c__client" title="C# client">C#
+          client</a>
+</h5></div></div></div>
+<p>
+            
+</p>
+<pre class="programlisting"> 
+<span class="keyword">using</span> <span class="identifier">DeltaVSoft</span><span class="special">.</span><span class="identifier">RCFProto</span><span class="special">;</span>
+
+<span class="keyword">class</span> <span class="identifier">TutorialClient</span>
+<span class="special">{</span>
+    <span class="keyword">static</span> <span class="keyword">int</span> <span class="identifier">Main</span><span class="special">(</span><span class="identifier">string</span><span class="special">[]</span> <span class="identifier">args</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">try</span>
+        <span class="special">{</span>
+            <span class="comment">// Initialize RCFProto.
+</span>            <span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">Init</span><span class="special">();</span>
+
+            <span class="comment">// Create request object.
+</span>            <span class="identifier">SearchRequest</span> <span class="identifier">request</span> <span class="special">=</span> <span class="identifier">SearchRequest</span><span class="special">.</span><span class="identifier">CreateBuilder</span><span class="special">()</span>
+                <span class="special">.</span><span class="identifier">SetQuery</span><span class="special">(</span><span class="string">"something to search for"</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">SetResultPerPage</span><span class="special">(</span><span class="number">10</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">SetPageNumber</span><span class="special">(</span><span class="number">0</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">SetCorpus</span><span class="special">(</span><span class="identifier">SearchRequest</span><span class="special">.</span><span class="identifier">Types</span><span class="special">.</span><span class="identifier">Corpus</span><span class="special">.</span><span class="identifier">NEWS</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">Build</span><span class="special">();</span>
+
+            <span class="comment">// Create channel.
+</span>            <span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">RcfProtoChannel</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+            <span class="comment">// Create service stub.
+</span>            <span class="identifier">SearchService</span><span class="special">.</span><span class="identifier">Stub</span> <span class="identifier">stub</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">SearchService</span><span class="special">.</span><span class="identifier">Stub</span><span class="special">(</span><span class="identifier">channel</span><span class="special">);</span>
+
+            <span class="comment">// Print out request.
+</span>            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="string">"Sending request:"</span><span class="special">);</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="identifier">request</span><span class="special">.</span><span class="identifier">ToString</span><span class="special">());</span>
+
+            <span class="comment">// Make a synchronous remote call to server.
+</span>            <span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(</span><span class="identifier">null</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">null</span><span class="special">);</span>
+            <span class="identifier">SearchResponse</span> <span class="identifier">response</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">SearchResponse</span><span class="special">)</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">GetResponse</span><span class="special">();</span>
+
+            <span class="comment">// Print out response.
+</span>            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="string">"Received response:"</span><span class="special">);</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="identifier">response</span><span class="special">.</span><span class="identifier">ToString</span><span class="special">());</span>
+        <span class="special">}</span>
+        <span class="keyword">catch</span> <span class="special">(</span><span class="identifier">System</span><span class="special">.</span><span class="identifier">Exception</span> <span class="identifier">e</span><span class="special">)</span>
+        <span class="special">{</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span><span class="string">"Exception: "</span> <span class="special">+</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">Message</span><span class="special">);</span>
+            <span class="keyword">return</span> <span class="number">1</span><span class="special">;</span>
+        <span class="special">}</span>
+
+        <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+
+</pre>
+<p>
+          </p>
+</div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.java"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.java" title="Java">Java</a>
+</h4></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.java.java_server">Java
+          server</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.java.java_client">Java
+          client</a></span></dt>
+</dl></div>
+<p>
+          To use RCFProto in Java, you need to have <code class="computeroutput"><span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">jar</span></code>
+          and the relevant Google Protocol Buffers <code class="computeroutput"><span class="special">.</span><span class="identifier">jar</span></code> file, on your class path. RCFProto
+          Java classes are defined in the <code class="computeroutput"><span class="identifier">com</span><span class="special">.</span><span class="identifier">deltavsoft</span><span class="special">.</span><span class="identifier">rcfproto</span></code>
+          namespace.
+        </p>
+<p>
+          To generate Java code for your message and service types, use <code class="computeroutput"><span class="identifier">protoc</span></code>:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">protoc</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">proto</span> <span class="special">--</span><span class="identifier">java_out</span><span class="special">=.</span>
+</pre>
+<p>
+        </p>
+<p>
+          For more information on building Java applications, see <a class="link" href="AppendixBuilding.html" title="Appendix - Building RCFProto">Appendix
+          - Building</a>.
+        </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.java.java_server"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.java.java_server" title="Java server">Java
+          server</a>
+</h5></div></div></div>
+<p>
+            
+</p>
+<pre class="programlisting"><span class="identifier">import</span> <span class="identifier">com</span><span class="special">.</span><span class="identifier">deltavsoft</span><span class="special">.</span><span class="identifier">rcfproto</span><span class="special">.*;</span>
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="identifier">TutorialServer</span>
+<span class="special">{</span>
+    <span class="comment">// SearchService implementation.
+</span>    <span class="keyword">static</span> <span class="keyword">class</span> <span class="identifier">SearchServiceImpl</span> <span class="identifier">extends</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchService</span>
+    <span class="special">{</span>
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="identifier">search</span><span class="special">(</span>
+            <span class="identifier">com</span><span class="special">.</span><span class="identifier">google</span><span class="special">.</span><span class="identifier">protobuf</span><span class="special">.</span><span class="identifier">RpcController</span> <span class="identifier">controller</span><span class="special">,</span>
+            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">,</span>
+            <span class="identifier">com</span><span class="special">.</span><span class="identifier">google</span><span class="special">.</span><span class="identifier">protobuf</span><span class="special">.</span><span class="identifier">RpcCallback</span><span class="special">&lt;</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">&gt;</span> <span class="identifier">done</span><span class="special">)</span>
+        <span class="special">{</span>
+            <span class="comment">// Build the response.
+</span>
+            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Builder</span> <span class="identifier">responseBuilder</span> <span class="special">=</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">newBuilder</span><span class="special">();</span>
+            
+            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Result</span> <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Result</span><span class="special">.</span><span class="identifier">newBuilder</span><span class="special">()</span>
+                <span class="special">.</span><span class="identifier">setTitle</span><span class="special">(</span><span class="string">"First result"</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">setUrl</span><span class="special">(</span><span class="string">"http://acme.org/"</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">build</span><span class="special">();</span>
+
+            <span class="identifier">responseBuilder</span><span class="special">.</span><span class="identifier">addResult</span><span class="special">(</span><span class="identifier">result</span><span class="special">);</span>
+
+            <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">Result</span><span class="special">.</span><span class="identifier">newBuilder</span><span class="special">()</span>
+                <span class="special">.</span><span class="identifier">setTitle</span><span class="special">(</span><span class="string">"Second result"</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">setUrl</span><span class="special">(</span><span class="string">"http://acme.org/abc"</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">addSnippets</span><span class="special">(</span><span class="string">"Another snippet from acme.org."</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">build</span><span class="special">();</span>
+
+            <span class="identifier">responseBuilder</span><span class="special">.</span><span class="identifier">addResult</span><span class="special">(</span><span class="identifier">result</span><span class="special">);</span>
+
+            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span> <span class="identifier">response</span> <span class="special">=</span> <span class="identifier">responseBuilder</span><span class="special">.</span><span class="identifier">build</span><span class="special">();</span>
+
+            <span class="comment">// Send response back to the client.
+</span>            <span class="identifier">done</span><span class="special">.</span><span class="identifier">run</span><span class="special">(</span><span class="identifier">response</span><span class="special">);</span>
+        <span class="special">}</span>
+
+    <span class="special">}</span>
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">main</span><span class="special">(</span><span class="identifier">String</span><span class="special">[]</span> <span class="identifier">args</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">try</span>
+        <span class="special">{</span>
+            <span class="comment">// Initialize RCFProto.
+</span>            <span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">init</span><span class="special">();</span>
+
+            <span class="comment">// Create server.
+</span>            <span class="identifier">RcfProtoServer</span> <span class="identifier">server</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">RcfProtoServer</span><span class="special">(</span><span class="keyword">new</span> <span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">));</span>
+
+            <span class="comment">// Bind Protobuf service.
+</span>            <span class="identifier">SearchServiceImpl</span> <span class="identifier">searchServiceImpl</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">SearchServiceImpl</span><span class="special">();</span>
+            <span class="identifier">server</span><span class="special">.</span><span class="identifier">bindService</span><span class="special">(</span><span class="identifier">searchServiceImpl</span><span class="special">);</span>
+
+            <span class="comment">// Start the server.
+</span>            <span class="identifier">server</span><span class="special">.</span><span class="identifier">start</span><span class="special">();</span>
+
+            <span class="comment">// Wait for clients.        
+</span>            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="string">"Press Enter to exit."</span><span class="special">);</span>
+            <span class="identifier">java</span><span class="special">.</span><span class="identifier">io</span><span class="special">.</span><span class="identifier">BufferedReader</span> <span class="identifier">reader</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">java</span><span class="special">.</span><span class="identifier">io</span><span class="special">.</span><span class="identifier">BufferedReader</span><span class="special">(</span><span class="keyword">new</span> <span class="identifier">java</span><span class="special">.</span><span class="identifier">io</span><span class="special">.</span><span class="identifier">InputStreamReader</span><span class="special">(</span><span class="identifier">System</span><span class="special">.</span><span class="identifier">in</span><span class="special">));</span>
+            <span class="identifier">reader</span><span class="special">.</span><span class="identifier">readLine</span><span class="special">();</span>                        
+        <span class="special">}</span>
+        <span class="keyword">catch</span> <span class="special">(</span><span class="identifier">Exception</span> <span class="identifier">e</span><span class="special">)</span>
+        <span class="special">{</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="string">"Exception: "</span> <span class="special">+</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">getMessage</span><span class="special">());</span>
+        <span class="special">}</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+</pre>
+<p>
+          </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.java.java_client"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.java.java_client" title="Java client">Java
+          client</a>
+</h5></div></div></div>
+<p>
+            
+</p>
+<pre class="programlisting"> 
+<span class="identifier">import</span> <span class="identifier">com</span><span class="special">.</span><span class="identifier">deltavsoft</span><span class="special">.</span><span class="identifier">rcfproto</span><span class="special">.*;</span>
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="identifier">TutorialClient</span>
+<span class="special">{</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">main</span><span class="special">(</span><span class="identifier">String</span><span class="special">[]</span> <span class="identifier">args</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">try</span>
+        <span class="special">{</span>
+            <span class="comment">// Initialize RCFProto.
+</span>            <span class="identifier">RCFProto</span><span class="special">.</span><span class="identifier">init</span><span class="special">();</span>
+
+            <span class="comment">// Create request object.
+</span>            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchRequest</span> <span class="identifier">request</span> <span class="special">=</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchRequest</span><span class="special">.</span><span class="identifier">newBuilder</span><span class="special">()</span>
+                <span class="special">.</span><span class="identifier">setQuery</span><span class="special">(</span><span class="string">"something to search for"</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">setResultPerPage</span><span class="special">(</span><span class="number">10</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">setPageNumber</span><span class="special">(</span><span class="number">0</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">setCorpus</span><span class="special">(</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchRequest</span><span class="special">.</span><span class="identifier">Corpus</span><span class="special">.</span><span class="identifier">NEWS</span><span class="special">)</span>
+                <span class="special">.</span><span class="identifier">build</span><span class="special">();</span>
+
+            <span class="comment">// Create channel.
+</span>            <span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">RcfProtoChannel</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+            <span class="comment">// Create service stub.
+</span>            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchService</span><span class="special">.</span><span class="identifier">Stub</span> <span class="identifier">stub</span> <span class="special">=</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchService</span><span class="special">.</span><span class="identifier">newStub</span><span class="special">(</span><span class="identifier">channel</span><span class="special">);</span>
+
+            <span class="comment">// Print out request.
+</span>            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="string">"Sending request:"</span><span class="special">);</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="identifier">request</span><span class="special">.</span><span class="identifier">toString</span><span class="special">());</span>
+
+            <span class="comment">// Make a synchronous remote call to server.
+</span>            <span class="identifier">stub</span><span class="special">.</span><span class="identifier">search</span><span class="special">(</span><span class="identifier">null</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">null</span><span class="special">);</span>
+            <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span> <span class="identifier">response</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">)</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">getResponse</span><span class="special">();</span>
+
+            <span class="comment">// Print out response.
+</span>            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="string">"Received response:"</span><span class="special">);</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="identifier">response</span><span class="special">.</span><span class="identifier">toString</span><span class="special">());</span>
+        <span class="special">}</span>
+        <span class="keyword">catch</span> <span class="special">(</span><span class="identifier">Exception</span> <span class="identifier">e</span><span class="special">)</span>
+        <span class="special">{</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="string">"Exception: "</span> <span class="special">+</span> <span class="identifier">e</span><span class="special">.</span><span class="identifier">getMessage</span><span class="special">());</span>
+        <span class="special">}</span>
+
+    <span class="special">}</span>
+<span class="special">}</span>
+
+</pre>
+<p>
+          </p>
+</div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.python"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.python" title="Python">Python</a>
+</h4></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.python.python_server">Python
+          server</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.python.python_client">Python
+          client</a></span></dt>
+</dl></div>
+<p>
+          To use RCFProto in Python, you need to install the RCFProto and Google
+          Protocol Buffers Python modules. RCFProto Python classes are defined in
+          the <code class="computeroutput"><span class="identifier">deltavsoft</span><span class="special">.</span><span class="identifier">rcfproto</span></code> package.
+        </p>
+<p>
+          To generate Python code for your message and service types, use <code class="computeroutput"><span class="identifier">protoc</span></code>:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">protoc</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">proto</span> <span class="special">--</span><span class="identifier">python_out</span><span class="special">=.</span>
+</pre>
+<p>
+        </p>
+<p>
+          For more information on building Python applications, see <a class="link" href="AppendixBuilding.html" title="Appendix - Building RCFProto">Appendix
+          - Building</a>.
+        </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.python.python_server"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.python.python_server" title="Python server">Python
+          server</a>
+</h5></div></div></div>
+<p>
+            
+</p>
+<pre class="programlisting"><span class="identifier">import</span> <span class="identifier">sys</span>
+
+<span class="preprocessor"># Import</span> <span class="identifier">RCFProto</span><span class="special">.</span>
+<span class="identifier">from</span> <span class="identifier">deltavsoft</span><span class="special">.</span><span class="identifier">rcfproto</span> <span class="identifier">import</span> <span class="special">*</span>
+
+<span class="preprocessor"># Import</span> <span class="identifier">protoc</span><span class="special">-</span><span class="identifier">generated</span> <span class="identifier">module</span> <span class="identifier">with</span> <span class="identifier">message</span> <span class="keyword">and</span> <span class="identifier">service</span> <span class="identifier">types</span><span class="special">.</span>
+<span class="identifier">import</span> <span class="identifier">Tutorial_pb2</span>
+
+<span class="preprocessor"># SearchService</span> <span class="identifier">implementation</span><span class="special">.</span>
+<span class="keyword">class</span> <span class="identifier">SearchServiceImpl</span><span class="special">(</span><span class="identifier">Tutorial_pb2</span><span class="special">.</span><span class="identifier">SearchService</span><span class="special">)</span> <span class="special">:</span>
+
+    <span class="identifier">def</span> <span class="identifier">Search</span><span class="special">(</span><span class="identifier">self</span><span class="special">,</span> <span class="identifier">controller</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">done</span><span class="special">):</span>
+
+        <span class="preprocessor"># Build</span> <span class="identifier">the</span> <span class="identifier">response</span><span class="special">.</span>
+        <span class="identifier">response</span> <span class="special">=</span> <span class="identifier">Demo_pb2</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">()</span>
+
+        <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">response</span><span class="special">.</span><span class="identifier">result</span><span class="special">.</span><span class="identifier">add</span><span class="special">()</span>
+        <span class="identifier">result</span><span class="special">.</span><span class="identifier">title</span> <span class="special">=</span> <span class="char">'First result'</span>
+        <span class="identifier">result</span><span class="special">.</span><span class="identifier">url</span> <span class="special">=</span> <span class="char">'http://acme.org'</span>
+
+        <span class="identifier">result</span> <span class="special">=</span> <span class="identifier">response</span><span class="special">.</span><span class="identifier">result</span><span class="special">.</span><span class="identifier">add</span><span class="special">()</span>
+        <span class="identifier">result</span><span class="special">.</span><span class="identifier">title</span> <span class="special">=</span> <span class="char">'Second result'</span>
+        <span class="identifier">result</span><span class="special">.</span><span class="identifier">url</span> <span class="special">=</span> <span class="char">'http://acme.org/abc'</span>
+        <span class="identifier">result</span><span class="special">.</span><span class="identifier">snippets</span><span class="special">.</span><span class="identifier">append</span><span class="special">(</span><span class="char">'Another snippet from acme.org.'</span><span class="special">)</span>
+
+        <span class="preprocessor"># Send</span> <span class="identifier">response</span> <span class="identifier">back</span> <span class="identifier">to</span> <span class="identifier">the</span> <span class="identifier">client</span><span class="special">.</span>
+        <span class="identifier">done</span><span class="special">(</span><span class="identifier">response</span><span class="special">)</span>
+
+<span class="preprocessor"># Initialize</span> <span class="identifier">RCFProto</span><span class="special">.</span>
+<span class="identifier">init</span><span class="special">()</span>
+
+<span class="preprocessor"># Create</span> <span class="identifier">server</span><span class="special">.</span>
+<span class="identifier">server</span> <span class="special">=</span> <span class="identifier">RcfProtoServer</span><span class="special">(</span> <span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="preprocessor"># Bind</span> <span class="identifier">Protobuf</span> <span class="identifier">service</span><span class="special">.</span>
+<span class="identifier">svc</span> <span class="special">=</span> <span class="identifier">SearchServiceImpl</span><span class="special">();</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">BindService</span><span class="special">(</span><span class="identifier">svc</span><span class="special">);</span>
+
+<span class="preprocessor"># Start</span> <span class="identifier">the</span> <span class="identifier">server</span><span class="special">.</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">Start</span><span class="special">();</span>
+
+<span class="preprocessor"># Wait</span> <span class="keyword">for</span> <span class="identifier">clients</span><span class="special">.</span>
+<span class="identifier">print</span><span class="special">(</span><span class="char">'Press Enter to exit.'</span><span class="special">);</span>
+<span class="identifier">sys</span><span class="special">.</span><span class="identifier">stdin</span><span class="special">.</span><span class="identifier">readline</span><span class="special">()</span></pre>
+<p>
+          </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="rcfproto_user_guide.tutorial.rcfproto_client_server_example.python.python_client"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.rcfproto_client_server_example.python.python_client" title="Python client">Python
+          client</a>
+</h5></div></div></div>
+<p>
+            
+</p>
+<pre class="programlisting"><span class="preprocessor"># Import</span> <span class="identifier">RCFProto</span><span class="special">.</span>
+<span class="identifier">from</span> <span class="identifier">deltavsoft</span><span class="special">.</span><span class="identifier">rcfproto</span> <span class="identifier">import</span> <span class="special">*</span>
+
+<span class="preprocessor"># Import</span> <span class="identifier">protoc</span><span class="special">-</span><span class="identifier">generated</span> <span class="identifier">module</span> <span class="identifier">with</span> <span class="identifier">message</span> <span class="keyword">and</span> <span class="identifier">service</span> <span class="identifier">types</span><span class="special">.</span>
+<span class="identifier">import</span> <span class="identifier">Tutorial_pb2</span>
+
+<span class="preprocessor"># Initialize</span> <span class="identifier">RCFProto</span><span class="special">.</span>
+<span class="identifier">init</span><span class="special">();</span>
+
+<span class="preprocessor"># Create</span> <span class="identifier">request</span> <span class="identifier">object</span><span class="special">.</span>
+<span class="identifier">request</span> <span class="special">=</span> <span class="identifier">Tutorial_pb2</span><span class="special">.</span><span class="identifier">SearchRequest</span><span class="special">()</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">query</span> <span class="special">=</span> <span class="char">'Something to search for'</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">result_per_page</span> <span class="special">=</span> <span class="number">10</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">page_number</span> <span class="special">=</span> <span class="number">0</span>
+<span class="identifier">request</span><span class="special">.</span><span class="identifier">corpus</span> <span class="special">=</span> <span class="identifier">Tutorial_pb2</span><span class="special">.</span><span class="identifier">SearchRequest</span><span class="special">.</span><span class="identifier">NEWS</span>
+
+<span class="preprocessor"># Create</span> <span class="identifier">channel</span><span class="special">.</span>
+<span class="identifier">channel</span> <span class="special">=</span> <span class="identifier">RcfProtoChannel</span><span class="special">(</span> <span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="preprocessor"># Create</span> <span class="identifier">service</span> <span class="identifier">stub</span><span class="special">.</span>
+<span class="identifier">stub</span> <span class="special">=</span> <span class="identifier">Tutorial_pb2</span><span class="special">.</span><span class="identifier">SearchService_Stub</span><span class="special">(</span><span class="identifier">channel</span><span class="special">);</span>
+
+<span class="preprocessor"># Print</span> <span class="identifier">out</span> <span class="identifier">request</span><span class="special">.</span>
+<span class="identifier">print</span><span class="special">(</span><span class="char">'Sending request:'</span><span class="special">);</span>
+<span class="identifier">print</span><span class="special">(</span> <span class="identifier">str</span><span class="special">(</span><span class="identifier">request</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="preprocessor"># Make</span> <span class="identifier">a</span> <span class="identifier">synchronous</span> <span class="identifier">remote</span> <span class="identifier">call</span> <span class="identifier">to</span> <span class="identifier">server</span><span class="special">.</span>
+<span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(</span><span class="identifier">None</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">None</span><span class="special">);</span>
+<span class="identifier">response</span> <span class="special">=</span> <span class="identifier">channel</span><span class="special">.</span><span class="identifier">GetResponse</span><span class="special">();</span>
+
+<span class="preprocessor"># Print</span> <span class="identifier">out</span> <span class="identifier">response</span><span class="special">.</span>
+<span class="identifier">print</span> <span class="char">'Received response:'</span><span class="special">;</span>
+<span class="identifier">print</span><span class="special">(</span> <span class="identifier">str</span><span class="special">(</span><span class="identifier">response</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+          </p>
+</div>
+</div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="rcfproto_user_guide.tutorial.client_configuration"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.client_configuration" title="Client configuration">Client
+      configuration</a>
+</h3></div></div></div>
+<p>
+        RCFProto client-side configuration is done using the <code class="computeroutput"><span class="identifier">RcfProtoChannel</span></code>
+        class.
+      </p>
+<p>
+        For example, to set connect timeouts and remote call timeouts:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="comment">// 5s connect timeout.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setConnectTimeoutMs</span><span class="special">(</span><span class="number">5</span><span class="special">*</span><span class="number">1000</span><span class="special">);</span>
+
+<span class="comment">// 10s remote call timeout.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setRemoteCallTimeoutMs</span><span class="special">(</span><span class="number">10</span><span class="special">*</span><span class="number">1000</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        You can configure transport protocols:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Enable transport level compression.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setEnableCompression</span><span class="special">(</span><span class="keyword">true</span><span class="special">);</span>
+
+<span class="comment">// Configure NTLM transport protocol.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setTransportProtocol</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Ntlm</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        For more information on client-side configuration, see the relevant reference
+        documentation for <code class="computeroutput"><span class="identifier">RcfProtoChannel</span></code>.
+      </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="rcfproto_user_guide.tutorial.server_configuration"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.server_configuration" title="Server configuration">Server
+      configuration</a>
+</h3></div></div></div>
+<p>
+        RCFProto server-side configuration is done using the <code class="computeroutput"><span class="identifier">RcfProtoServer</span></code>
+        and <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code> classes.
+      </p>
+<p>
+        Configuring server endpoints:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// RcfProtoServer listening on single endpoint.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// RcfProtoServer listening on multiple endpoints.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">;</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">addEndpoint</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">addEndpoint</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Win32NamedPipeEndpoint</span><span class="special">(</span><span class="string">"MyPipe"</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        Configuring server-side threading:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Configure a thread pool with number of threads varying from 1 to 50.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">ThreadPoolPtr</span> <span class="identifier">threadPoolPtr</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">ThreadPool</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">50</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">setThreadPool</span><span class="special">(</span><span class="identifier">threadPoolPtr</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        Configuring which transport protocols clients are required to use:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TransportProtocol</span><span class="special">&gt;</span> <span class="identifier">protocols</span><span class="special">;</span>
+<span class="identifier">protocols</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Ntlm</span><span class="special">);</span>
+<span class="identifier">protocols</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Kerberos</span><span class="special">);</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">setSupportedTransportProtocols</span><span class="special">(</span><span class="identifier">protocols</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        From the server-side implementation of a remote call, you have access to
+        a <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code> object,
+        representing the current client session. Here is how you would obtain the
+        current <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code> in
+        C++:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Search() method implementation.
+</span><span class="keyword">void</span> <span class="identifier">Search</span><span class="special">(</span>
+    <span class="identifier">RpcController</span> <span class="special">*</span>                 <span class="identifier">controller</span><span class="special">,</span>
+    <span class="keyword">const</span> <span class="identifier">SearchRequest</span> <span class="special">*</span>           <span class="identifier">request</span><span class="special">,</span>
+    <span class="identifier">SearchResponse</span> <span class="special">*</span>                <span class="identifier">response</span><span class="special">,</span>
+    <span class="identifier">Closure</span> <span class="special">*</span>                       <span class="identifier">done</span><span class="special">)</span>
+<span class="special">{</span>
+
+    <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoController</span> <span class="special">*</span> <span class="identifier">rcfController</span> <span class="special">=</span> 
+        <span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoController</span> <span class="special">*&gt;(</span><span class="identifier">controller</span><span class="special">);</span>
+
+    <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoSession</span> <span class="special">*</span> <span class="identifier">pSession</span> <span class="special">=</span> <span class="identifier">rcfController</span><span class="special">-&gt;</span><span class="identifier">getSession</span><span class="special">();</span>
+
+    <span class="comment">// Fill in the response.
+</span>    <span class="comment">// ...
+</span>
+    <span class="comment">// Send it back to the client.
+</span>    <span class="identifier">done</span><span class="special">-&gt;</span><span class="identifier">Run</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Here is how you obtain the current <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code>
+        in C#:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Search() method implemenation.
+</span><span class="keyword">public</span> <span class="identifier">override</span> <span class="keyword">void</span> <span class="identifier">Search</span><span class="special">(</span>
+    <span class="identifier">Google</span><span class="special">.</span><span class="identifier">ProtocolBuffers</span><span class="special">.</span><span class="identifier">IRpcController</span> <span class="identifier">controller</span><span class="special">,</span>
+    <span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">,</span>
+    <span class="identifier">System</span><span class="special">.</span><span class="identifier">Action</span><span class="special">&lt;</span><span class="identifier">SearchResponse</span><span class="special">&gt;</span> <span class="identifier">done</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="comment">// Obtain RcfProtoSession for current client connection.
+</span>    <span class="identifier">RcfProtoController</span> <span class="identifier">rcfController</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">RcfProtoController</span><span class="special">)</span><span class="identifier">controller</span><span class="special">;</span>
+    <span class="identifier">RcfProtoSession</span> <span class="identifier">session</span> <span class="special">=</span> <span class="identifier">rcfController</span><span class="special">.</span><span class="identifier">GetSession</span><span class="special">();</span>
+
+    <span class="comment">// Create response.
+</span>    <span class="identifier">SearchResponse</span> <span class="identifier">response</span> <span class="special">=</span> <span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">CreateBuilder</span><span class="special">().</span><span class="identifier">Build</span><span class="special">();</span>
+
+    <span class="comment">// Send it back to the client.
+</span>    <span class="identifier">done</span><span class="special">(</span><span class="identifier">response</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Here is how you obtain the current <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code>
+        in Java:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="keyword">public</span> <span class="keyword">void</span> <span class="identifier">search</span><span class="special">(</span>
+    <span class="identifier">com</span><span class="special">.</span><span class="identifier">google</span><span class="special">.</span><span class="identifier">protobuf</span><span class="special">.</span><span class="identifier">RpcController</span> <span class="identifier">controller</span><span class="special">,</span>
+    <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">,</span>
+    <span class="identifier">com</span><span class="special">.</span><span class="identifier">google</span><span class="special">.</span><span class="identifier">protobuf</span><span class="special">.</span><span class="identifier">RpcCallback</span><span class="special">&lt;</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">&gt;</span> <span class="identifier">done</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="comment">// Obtain RcfProtoSession for current client connection.
+</span>    <span class="identifier">RcfProtoController</span> <span class="identifier">rcfController</span> <span class="special">=</span> <span class="special">(</span><span class="identifier">RcfProtoController</span><span class="special">)</span><span class="identifier">controller</span><span class="special">;</span>
+    <span class="identifier">RcfProtoSession</span> <span class="identifier">session</span> <span class="special">=</span> <span class="identifier">rcfController</span><span class="special">.</span><span class="identifier">getSession</span><span class="special">();</span>
+
+    <span class="comment">// Create response.
+</span>    <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span> <span class="identifier">response</span> <span class="special">=</span> <span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">.</span><span class="identifier">newBuilder</span><span class="special">().</span><span class="identifier">build</span><span class="special">();</span>
+
+    <span class="comment">// Send it back to the client.
+</span>    <span class="identifier">done</span><span class="special">.</span><span class="identifier">run</span><span class="special">(</span><span class="identifier">response</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Here is how you obtain the current <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code>
+        in Python:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="preprocessor"># Search</span><span class="special">()</span> <span class="identifier">method</span> <span class="identifier">implementation</span><span class="special">.</span>
+<span class="identifier">def</span> <span class="identifier">Search</span><span class="special">(</span><span class="identifier">self</span><span class="special">,</span> <span class="identifier">controller</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">done</span><span class="special">):</span>
+
+    <span class="preprocessor"># Obtain</span> <span class="identifier">RcfProtoSession</span> <span class="keyword">for</span> <span class="identifier">current</span> <span class="identifier">client</span> <span class="identifier">connection</span><span class="special">.</span>
+    <span class="identifier">session</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">GetSession</span><span class="special">();</span>
+
+    <span class="preprocessor"># Create</span> <span class="identifier">response</span><span class="special">.</span>
+    <span class="identifier">response</span> <span class="special">=</span> <span class="identifier">Tutorial_pb2</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">()</span>
+
+    <span class="preprocessor"># Send</span> <span class="identifier">it</span> <span class="identifier">back</span> <span class="identifier">to</span> <span class="identifier">the</span> <span class="identifier">client</span><span class="special">.</span>
+    <span class="identifier">done</span><span class="special">(</span><span class="identifier">response</span><span class="special">)</span>
+
+</pre>
+<p>
+      </p>
+<p>
+        From <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code>, you
+        can retrieve various details about the client.
+      </p>
+<p>
+        You can determine the transport type and transport protocol in use:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TransportType</span> <span class="identifier">transportType</span> <span class="special">=</span> <span class="identifier">pSession</span><span class="special">-&gt;</span><span class="identifier">getTransportType</span><span class="special">();</span>
+<span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TransportProtocol</span> <span class="identifier">protocol</span> <span class="special">=</span> <span class="identifier">pSession</span><span class="special">-&gt;</span><span class="identifier">getTransportProtocol</span><span class="special">();</span>
+</pre>
+<p>
+      </p>
+<p>
+        If the transport protocol is NTLM or Kerberos, or if the transport is a Win32
+        named pipe, you can determine the Windows username of the client:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="keyword">if</span> <span class="special">(</span>    <span class="special">(</span><span class="identifier">protocol</span> <span class="special">==</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Ntlm</span> <span class="special">||</span> <span class="identifier">protocol</span> <span class="special">==</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Kerberos</span><span class="special">)</span> 
+    <span class="special">||</span>  <span class="identifier">transportType</span> <span class="special">==</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tt_Win32NamedPipe</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">clientUsername</span> <span class="special">=</span> <span class="identifier">pSession</span><span class="special">-&gt;</span><span class="identifier">getClientUsername</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        For more information on server-side configuration, see the relevant reference
+        documentation for <code class="computeroutput"><span class="identifier">RcfProtoServer</span></code>
+        and <code class="computeroutput"><span class="identifier">RcfProtoSession</span></code>.
+      </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="rcfproto_user_guide.tutorial.asynchronous_remote_calls"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.asynchronous_remote_calls" title="Asynchronous remote calls">Asynchronous
+      remote calls</a>
+</h3></div></div></div>
+<p>
+        When you call remote methods on a client stub, RCFProto's default behavior
+        is to make a synchronous call. This means that the method does not return
+        until a response is received from the server, or an error or timeout occurs.
+        Synchronous calls are conceptually simple and easy to program. However, they
+        also have the drawback that during the call, your application does not have
+        control of the calling thread. In some situations this may not be acceptable,
+        in which case you will need to use asynchronous remote calls instead.
+      </p>
+<p>
+        When making an asynchronous call, you need to pass in a completion handler
+        that RCFProto will call when the call completes. The call is initiated on
+        your own application thread, but the thread does not block and returns immediately
+        to the application. Meanwhile the call completes on a background RCFProto
+        thread, and when it does, your completion callback is called.
+      </p>
+<p>
+        Here is an example of an asynchronous call in C++:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Remote call completion handler.
+</span><span class="keyword">void</span> <span class="identifier">onCallCompletion</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoController</span> <span class="special">*</span> <span class="identifier">pController</span><span class="special">,</span> <span class="identifier">SearchRequest</span> <span class="special">*</span> <span class="identifier">pRequest</span><span class="special">,</span> <span class="identifier">SearchResponse</span> <span class="special">*</span> <span class="identifier">pResponse</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="comment">// Check for any errors first.
+</span>    <span class="keyword">if</span> <span class="special">(</span><span class="identifier">pController</span><span class="special">-&gt;</span><span class="identifier">Failed</span><span class="special">())</span>
+    <span class="special">{</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Error: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pController</span><span class="special">-&gt;</span><span class="identifier">ErrorText</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+    <span class="keyword">else</span>
+    <span class="special">{</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">strResponse</span><span class="special">;</span>
+        <span class="identifier">TextFormat</span><span class="special">::</span><span class="identifier">PrintToString</span><span class="special">(*</span><span class="identifier">pResponse</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">strResponse</span><span class="special">);</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Received response:"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">strResponse</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Executing an asynchronous remote call.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setAsynchronousRpcMode</span><span class="special">(</span><span class="keyword">true</span><span class="special">);</span>
+<span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoController</span> <span class="identifier">controller</span><span class="special">;</span>
+<span class="identifier">RCF</span><span class="special">::</span><span class="identifier">BoostBindClosure</span> <span class="identifier">closure</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">(&amp;</span><span class="identifier">onCallCompletion</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">controller</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">request</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">response</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(&amp;</span><span class="identifier">controller</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">request</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">response</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">closure</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        <code class="computeroutput"><span class="identifier">RcfProtoController</span></code> is used
+        to monitor the asynchronous remote call while it is in progress:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// RcfProtoController is used to check on the progress of the asynchronous remote call, or to cancel it.
+</span>
+<span class="comment">// Poll for completion...
+</span><span class="keyword">while</span> <span class="special">(!</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">Completed</span><span class="special">())</span>
+<span class="special">{</span>
+    <span class="identifier">Sleep</span><span class="special">(</span><span class="number">500</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="comment">// ... or cancel the remote call.
+</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">StartCancel</span><span class="special">();</span>
+
+<span class="comment">// After the remote call completes, check if it failed.
+</span><span class="keyword">if</span> <span class="special">(</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">Failed</span><span class="special">())</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">errorMsg</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">ErrorText</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Here is an example of an asynchronous remote call in C#:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Remote call completion handler.
+</span><span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">onCallCompletion</span><span class="special">(</span><span class="identifier">RcfProtoController</span> <span class="identifier">controller</span><span class="special">,</span> <span class="identifier">SearchRequest</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">SearchResponse</span> <span class="identifier">response</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="comment">// Check for any errors first.
+</span>    <span class="keyword">if</span> <span class="special">(</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">Failed</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span> <span class="string">"Error: "</span> <span class="special">+</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">ErrorText</span> <span class="special">);</span>
+    <span class="special">}</span>
+    <span class="keyword">else</span>
+    <span class="special">{</span>
+        <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span> <span class="string">"Received response:"</span> <span class="special">);</span>
+        <span class="identifier">System</span><span class="special">.</span><span class="identifier">Console</span><span class="special">.</span><span class="identifier">WriteLine</span><span class="special">(</span> <span class="identifier">response</span><span class="special">.</span><span class="identifier">ToString</span><span class="special">()</span> <span class="special">);</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Executing an asynchronous remote call.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">SetAsynchronousRpcMode</span><span class="special">(</span><span class="keyword">true</span><span class="special">);</span>
+<span class="identifier">RcfProtoController</span> <span class="identifier">controller</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">RcfProtoController</span><span class="special">();</span>
+<span class="identifier">System</span><span class="special">.</span><span class="identifier">Action</span><span class="special">&lt;</span><span class="identifier">SearchResponse</span><span class="special">&gt;</span> <span class="identifier">done</span> <span class="special">=</span> <span class="identifier">delegate</span><span class="special">(</span><span class="identifier">SearchResponse</span> <span class="identifier">response</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">onCallCompletion</span><span class="special">(</span><span class="identifier">controller</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">response</span><span class="special">);</span>
+<span class="special">};</span>
+<span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(</span><span class="identifier">controller</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">done</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// RcfProtoController is used to check on the progress of the asynchronous remote call, or to cancel it.
+</span>
+<span class="comment">// Poll for completion...
+</span><span class="keyword">while</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">Completed</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">System</span><span class="special">.</span><span class="identifier">Threading</span><span class="special">.</span><span class="identifier">Thread</span><span class="special">.</span><span class="identifier">Sleep</span><span class="special">(</span><span class="number">500</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="comment">// ... or cancel the remote call.
+</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">StartCancel</span><span class="special">();</span>
+
+<span class="comment">// After the remote call completes, check if it failed.
+</span><span class="keyword">if</span> <span class="special">(</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">Failed</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">string</span> <span class="identifier">errorMsg</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">ErrorText</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Here is an example of an asynchronous remote call in Java:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Remote call completion handler.
+</span><span class="keyword">static</span> <span class="keyword">class</span> <span class="identifier">OnRemoteCallCompleted</span> <span class="identifier">implements</span> <span class="identifier">RpcCallback</span><span class="special">&lt;</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span><span class="special">&gt;</span>
+<span class="special">{</span>
+    <span class="identifier">OnRemoteCallCompleted</span><span class="special">(</span><span class="identifier">RcfProtoController</span> <span class="identifier">controller</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">mController</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="identifier">run</span><span class="special">(</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">SearchResponse</span> <span class="identifier">response</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">mController</span><span class="special">.</span><span class="identifier">failed</span><span class="special">()</span> <span class="special">)</span>
+        <span class="special">{</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span> <span class="string">"Error: "</span> <span class="special">+</span> <span class="identifier">mController</span><span class="special">.</span><span class="identifier">errorText</span><span class="special">()</span> <span class="special">);</span>
+        <span class="special">}</span>
+        <span class="keyword">else</span>
+        <span class="special">{</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="string">"Received response:"</span><span class="special">);</span>
+            <span class="identifier">System</span><span class="special">.</span><span class="identifier">out</span><span class="special">.</span><span class="identifier">println</span><span class="special">(</span><span class="identifier">response</span><span class="special">.</span><span class="identifier">toString</span><span class="special">());</span>
+        <span class="special">}</span>
+    <span class="special">}</span>
+
+    <span class="keyword">private</span> <span class="identifier">RcfProtoController</span> <span class="identifier">mController</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// Executing an asynchronous remote call.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setAsynchronousRpcMode</span><span class="special">(</span><span class="keyword">true</span><span class="special">);</span>
+<span class="identifier">RcfProtoController</span> <span class="identifier">controller</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">RcfProtoController</span><span class="special">();</span>
+<span class="identifier">OnRemoteCallCompleted</span> <span class="identifier">done</span> <span class="special">=</span> <span class="keyword">new</span> <span class="identifier">OnRemoteCallCompleted</span><span class="special">(</span><span class="identifier">controller</span><span class="special">);</span>
+<span class="identifier">stub</span><span class="special">.</span><span class="identifier">search</span><span class="special">(</span><span class="identifier">controller</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">done</span><span class="special">);</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="comment">// RcfProtoController is used to check on the progress of the asynchronous remote call, or to cancel it.
+</span>
+<span class="comment">// Poll for completion...
+</span><span class="keyword">while</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">completed</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">Thread</span><span class="special">.</span><span class="identifier">sleep</span><span class="special">(</span><span class="number">500</span><span class="special">);</span>
+<span class="special">}</span>
+
+<span class="comment">// ... or cancel the remote call.
+</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">startCancel</span><span class="special">();</span>
+
+<span class="comment">// After the remote call completes, check if it failed.
+</span><span class="keyword">if</span> <span class="special">(</span><span class="identifier">controller</span><span class="special">.</span><span class="identifier">failed</span><span class="special">())</span>
+<span class="special">{</span>
+    <span class="identifier">String</span> <span class="identifier">errorMsg</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">errorText</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Here is an example of an asynchronous remote call in Python:
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="preprocessor"># Remote</span> <span class="identifier">call</span> <span class="identifier">completion</span> <span class="identifier">handler</span><span class="special">.</span>
+<span class="identifier">def</span> <span class="identifier">OnRemoteCallCompleted</span><span class="special">(</span><span class="identifier">controller</span><span class="special">,</span> <span class="identifier">response</span><span class="special">):</span>
+    <span class="keyword">if</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">Failed</span><span class="special">():</span>
+        <span class="identifier">print</span> <span class="string">"Error: "</span> <span class="special">+</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">ErrorText</span><span class="special">()</span>
+    <span class="keyword">else</span><span class="special">:</span>
+        <span class="identifier">print</span><span class="special">(</span> <span class="char">'Received response:'</span> <span class="special">)</span>
+        <span class="identifier">print</span><span class="special">(</span> <span class="identifier">str</span><span class="special">(</span><span class="identifier">response</span><span class="special">)</span> <span class="special">)</span>
+
+<span class="preprocessor"># Executing</span> <span class="identifier">an</span> <span class="identifier">asynchronous</span> <span class="identifier">remote</span> <span class="identifier">call</span><span class="special">.</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">SetAsynchronousRpcMode</span><span class="special">(</span><span class="identifier">True</span><span class="special">)</span>
+<span class="identifier">controller</span> <span class="special">=</span> <span class="identifier">RcfProtoController</span><span class="special">()</span>
+<span class="identifier">stub</span><span class="special">.</span><span class="identifier">Search</span><span class="special">(</span><span class="identifier">controller</span><span class="special">,</span> <span class="identifier">request</span><span class="special">,</span> <span class="identifier">lambda</span> <span class="identifier">response</span><span class="special">:</span> <span class="identifier">OnRemoteCallCompleted</span><span class="special">(</span><span class="identifier">controller</span><span class="special">,</span> <span class="identifier">response</span><span class="special">))</span>
+</pre>
+<p>
+      </p>
+<p>
+        
+</p>
+<pre class="programlisting"><span class="preprocessor"># RcfProtoController</span> <span class="identifier">is</span> <span class="identifier">used</span> <span class="identifier">to</span> <span class="identifier">check</span> <span class="identifier">on</span> <span class="identifier">the</span> <span class="identifier">progress</span> <span class="identifier">of</span> <span class="identifier">the</span> <span class="identifier">asynchronous</span> <span class="identifier">remote</span> <span class="identifier">call</span><span class="special">,</span> <span class="keyword">or</span> <span class="identifier">to</span> <span class="identifier">cancel</span> <span class="identifier">it</span><span class="special">.</span>
+
+<span class="preprocessor"># Poll</span> <span class="keyword">for</span> <span class="identifier">completion</span><span class="special">...</span>
+<span class="keyword">while</span> <span class="keyword">not</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">Completed</span><span class="special">():</span>
+    <span class="identifier">time</span><span class="special">.</span><span class="identifier">sleep</span><span class="special">(.</span><span class="number">5</span><span class="special">);</span>
+
+
+<span class="error">#</span> <span class="special">...</span> <span class="keyword">or</span> <span class="identifier">cancel</span> <span class="identifier">the</span> <span class="identifier">remote</span> <span class="identifier">call</span><span class="special">.</span>
+<span class="identifier">controller</span><span class="special">.</span><span class="identifier">StartCancel</span><span class="special">();</span>
+
+<span class="preprocessor"># After</span> <span class="identifier">the</span> <span class="identifier">remote</span> <span class="identifier">call</span> <span class="identifier">completes</span><span class="special">,</span> <span class="identifier">check</span> <span class="keyword">if</span> <span class="identifier">it</span> <span class="identifier">failed</span><span class="special">.</span>
+<span class="keyword">if</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">Failed</span><span class="special">():</span>
+    <span class="identifier">errorMsg</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">ErrorText</span><span class="special">()</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="rcfproto_user_guide.tutorial.transports"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transports" title="Transports">Transports</a>
+</h3></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transports.tcp">TCP</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transports.http_https">HTTP/HTTPS</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transports.named_pipes">Named
+        pipes</a></span></dt>
+</dl></div>
+<p>
+        This section provides an overview of the various transports that RCFProto
+        supports.
+      </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transports.tcp"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transports.tcp" title="TCP">TCP</a>
+</h4></div></div></div>
+<p>
+          <code class="computeroutput"><span class="identifier">TcpEndpoint</span></code> represents
+          a TCP endpoint. It is important to remember that if you construct a <code class="computeroutput"><span class="identifier">TcpEndpoint</span></code> without passing in an IP
+          address, the loopback address <code class="computeroutput"><span class="number">127.0</span><span class="special">.</span><span class="number">0.1</span></code> is assumed.
+          For servers, this means that the server will only be accessible from the
+          local machine. To create a TCP endpoint that is accessible from across
+          the network, use <code class="computeroutput"><span class="number">0.0</span><span class="special">.</span><span class="number">0.0</span></code> (for IPV4), or <code class="computeroutput"><span class="special">::</span><span class="number">0</span></code> (for IPV6).
+        </p>
+<p>
+          Here are some examples of servers and clients using <code class="computeroutput"><span class="identifier">TcpEndpoint</span></code>.
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on port 50001 on all available IPv4 network interfaces.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on port 50001 on all available IPv6 network interfaces.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"::0"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on loopback IPv4 network interface.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"127.0.0.1"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on loopback IPv4 network interface.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on dynamically assigned port on loopback IPv4 network interface.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">0</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">start</span><span class="special">();</span>
+<span class="keyword">int</span> <span class="identifier">port</span> <span class="special">=</span> <span class="identifier">server</span><span class="special">.</span><span class="identifier">getIpServerTransport</span><span class="special">().</span><span class="identifier">getPort</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Connect to server on port 50001 of server.corp.com .
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="string">"server.corp.com"</span><span class="special">,</span> <span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transports.http_https"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transports.http_https" title="HTTP/HTTPS">HTTP/HTTPS</a>
+</h4></div></div></div>
+<p>
+          RCFProto provides HTTP and HTTPS based transports, in case you need to
+          tunnel through an HTTP proxy to reach your server.
+        </p>
+<p>
+          Here are some examples of servers and clients using <code class="computeroutput"><span class="identifier">HttpEndpoint</span></code>
+          and <code class="computeroutput"><span class="identifier">HttpsEndpoint</span></code>.
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on port 80 of all available IPv4 network interfaces.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">HttpEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">80</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Connect to port 80 of server.corp.com.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">HttpEndpoint</span><span class="special">(</span><span class="string">"server.corp.com"</span><span class="special">,</span> <span class="number">80</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="comment">// Configure HTTP proxy.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setHttpProxy</span><span class="special">(</span><span class="string">"proxy.corp.com"</span><span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setHttpProxyPort</span><span class="special">(</span><span class="number">8080</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on port 443 of all available IPv4 network interfaces.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">HttpsEndpoint</span><span class="special">(</span><span class="string">"0.0.0.0"</span><span class="special">,</span> <span class="number">443</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="comment">// Configure certificate for OpenSSL-based SSL.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">CertificatePtr</span> <span class="identifier">certPtr</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">PemCertificate</span><span class="special">(</span><span class="string">"/path/to/certificate.pem"</span><span class="special">,</span> <span class="string">"password"</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">setCertificate</span><span class="special">(</span><span class="identifier">certPtr</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Connect to port 443 of server.corp.com.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">HttpEndpoint</span><span class="special">(</span><span class="string">"server.corp.com"</span><span class="special">,</span> <span class="number">443</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="comment">// Configure HTTP proxy.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setHttpProxy</span><span class="special">(</span><span class="string">"proxy.corp.com"</span><span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setHttpProxyPort</span><span class="special">(</span><span class="number">8080</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Certificate configuration for HTTPS is done in the same way as for SSL
+          transports (see further down).
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transports.named_pipes"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transports.named_pipes" title="Named pipes">Named
+        pipes</a>
+</h4></div></div></div>
+<p>
+          For communication between processes on a single machine, RCF provides Win32
+          named pipe transport (for Windows), and UNIX local domain socket transports
+          (for UNIX):
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on Win32 named pipe named "MyPipe".
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Win32NamedPipeEndpoint</span><span class="special">(</span><span class="string">"MyPipe"</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Connect to Win32 named pipe named "MyPipe".
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Win32NamedPipeEndpoint</span><span class="special">(</span><span class="string">"MyPipe"</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Listen on UNIX local socket named "MyLocalSocket".
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">UnixLocalEndpoint</span><span class="special">(</span><span class="string">"MyLocalSocket"</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Connect to UNIX local socket named "MyLocalSocket".
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">UnixLocalEndpoint</span><span class="special">(</span><span class="string">"MyLocalSocket"</span><span class="special">)</span> <span class="special">);</span>
+</pre>
+<p>
+        </p>
+</div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="rcfproto_user_guide.tutorial.transport_protocols"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols" title="Transport protocols">Transport
+      protocols</a>
+</h3></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.compression">Compression</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.ntlm">NTLM</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.kerberos">Kerberos</a></span></dt>
+<dt><span class="section"><a href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.ssl">SSL</a></span></dt>
+</dl></div>
+<p>
+        RCFProto supports several different transport protocols, for purposes of
+        compression, encryption and authentication.
+      </p>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transport_protocols.compression"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.compression" title="Compression">Compression</a>
+</h4></div></div></div>
+<p>
+          Compression can be enabled for a <code class="computeroutput"><span class="identifier">RCFProtoChannel</span></code>.
+          The compression algorithm is stateful and compresses data across multiple
+          calls for better compression.
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setEnableCompression</span><span class="special">(</span><span class="keyword">true</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          RCFProto uses the <a href="http://www.zlib.net/" target="_top">zlib</a> library
+          to implement compression.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transport_protocols.ntlm"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.ntlm" title="NTLM">NTLM</a>
+</h4></div></div></div>
+<p>
+          On Windows, RCFProto supports <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa378749(v=vs.85).aspx" target="_top">NTLM</a>
+          encryption and authentication:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setTransportProtocol</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Ntlm</span><span class="special">);</span>
+
+<span class="comment">// Leave username and password blank, to connect using the logged on users credentials:
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">connect</span><span class="special">();</span>
+
+<span class="comment">// Or specify username and password explicitly:
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">disconnect</span><span class="special">();</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setUsername</span><span class="special">(</span><span class="string">"SomeDomain\\SomeUser"</span><span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setPassword</span><span class="special">(</span><span class="string">"SomePassword"</span><span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">connect</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+<p>
+          When the NTLM transport protocol is in use, server-side code is able to
+          securely determine the Windows username of the client:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// When using NTLM or Kerberos transport protocols, the client username is available to server-side code.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoSession</span> <span class="special">*</span> <span class="identifier">session</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">getSession</span><span class="special">();</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">clientUsername</span> <span class="special">=</span> <span class="identifier">session</span><span class="special">-&gt;</span><span class="identifier">getClientUsername</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transport_protocols.kerberos"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.kerberos" title="Kerberos">Kerberos</a>
+</h4></div></div></div>
+<p>
+          RCFProto also supports <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa378747(v=vs.85).aspx" target="_top">Kerberos</a>
+          encryption and authentication:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setTransportProtocol</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Tp_Kerberos</span><span class="special">);</span>
+
+<span class="comment">// Kerberos requires the client to specify the SPN (Server Principal Name) of the server.
+</span><span class="comment">// The Kerberos protocol will verify that the server is running as this account.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setKerberosSpn</span><span class="special">(</span><span class="string">"SomeDomain\\ServerAccount"</span><span class="special">);</span>
+
+<span class="comment">// As for NTML, username and password are optional. If not specified, the current users credentials are used.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setUsername</span><span class="special">(</span><span class="string">"SomeDomain\\SomeUser"</span><span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setPassword</span><span class="special">(</span><span class="string">"SomePassword"</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          When the Kerberos transport protocol is in use, server-side code is able
+          to securely determine the Windows username of the client:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// When using NTLM or Kerberos transport protocols, the client username is available to server-side code.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoSession</span> <span class="special">*</span> <span class="identifier">session</span> <span class="special">=</span> <span class="identifier">controller</span><span class="special">.</span><span class="identifier">getSession</span><span class="special">();</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">clientUsername</span> <span class="special">=</span> <span class="identifier">session</span><span class="special">-&gt;</span><span class="identifier">getClientUsername</span><span class="special">();</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="rcfproto_user_guide.tutorial.transport_protocols.ssl"></a><a class="link" href="tutorial.html#rcfproto_user_guide.tutorial.transport_protocols.ssl" title="SSL">SSL</a>
+</h4></div></div></div>
+<p>
+          RCFProto provides two separate SSL implementations. One is based on the
+          <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/aa380123(v=vs.85).aspx" target="_top">Schannel</a>
+          SSPI package in Windows, and the other is based on <a href="http://www.openssl.org/" target="_top">OpenSSL</a>.
+        </p>
+<p>
+          On Windows, it's a good idea to explicitly specify which SSL implementation
+          you want to use. This can be done globally:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">setDefaultSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_Schannel</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          , or for individual servers and clients:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">setSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_Schannel</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_Schannel</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Certificate validation can be done through custom validation callbacks,
+          or through OpenSSL-specific or Schannel-specific means.
+        </p>
+<p>
+          Here is an example of a custom validation callback:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Custom certificate validation callback.
+</span><span class="keyword">bool</span> <span class="identifier">onValidateCertificate</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Certificate</span> <span class="special">*</span> <span class="identifier">pCert</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Win32Certificate</span> <span class="special">*</span> <span class="identifier">pWin32Cert</span> <span class="special">=</span> <span class="keyword">dynamic_cast</span><span class="special">&lt;</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Win32Certificate</span> <span class="special">*&gt;(</span><span class="identifier">pCert</span><span class="special">);</span>
+    <span class="keyword">if</span> <span class="special">(</span><span class="identifier">pWin32Cert</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// Schannel based certificate.
+</span>        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Server certificate details: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">toAstring</span><span class="special">(</span><span class="identifier">pWin32Cert</span><span class="special">-&gt;</span><span class="identifier">getCertificateName</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Server certificate issuer details: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">toAstring</span><span class="special">(</span><span class="identifier">pWin32Cert</span><span class="special">-&gt;</span><span class="identifier">getIssuerName</span><span class="special">())</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">X509Certificate</span> <span class="special">*</span> <span class="identifier">pX509Cert</span> <span class="special">=</span> <span class="keyword">dynamic_cast</span><span class="special">&lt;</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">X509Certificate</span> <span class="special">*&gt;(</span><span class="identifier">pCert</span><span class="special">);</span>
+    <span class="keyword">if</span> <span class="special">(</span><span class="identifier">pX509Cert</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// OpenSSL based certificate.
+</span>        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Server certificate details: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pX509Cert</span><span class="special">-&gt;</span><span class="identifier">getCertificateName</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Server certificate issuer details: "</span> <span class="special">&lt;&lt;</span> <span class="identifier">pX509Cert</span><span class="special">-&gt;</span><span class="identifier">getIssuerName</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="comment">// Return false or throw an exception to indicate that you don't consider the certificate valid.
+</span>    <span class="comment">//return false;
+</span>    <span class="comment">//throw std::runtime_error("Invalid server certificate. Reason: ???");
+</span>
+    <span class="comment">// Return true to indicate that you consider the certificate valid.
+</span>    <span class="keyword">return</span> <span class="keyword">true</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          A number of methods are available on <code class="computeroutput"><span class="identifier">RcfProtoChannel</span></code>
+          and <code class="computeroutput"><span class="identifier">RcfProtoServer</span></code> to configure
+          certificate and certificate validation. Here is an example of certificate
+          configuration using OpenSSL:
+        </p>
+<p>
+          Server-side OpenSSL configuration:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Server-side configuration.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">setSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_OpenSsl</span><span class="special">);</span>
+
+<span class="identifier">RCF</span><span class="special">::</span><span class="identifier">CertificatePtr</span> <span class="identifier">certPtr</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">PemCertificate</span><span class="special">(</span>
+    <span class="string">"/path/to/certificate.pem"</span><span class="special">,</span> 
+    <span class="string">"password"</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="comment">// Set the certificate that this server will present to clients.
+</span><span class="identifier">server</span><span class="special">.</span><span class="identifier">setCertificate</span><span class="special">(</span><span class="identifier">certPtr</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Client-side OpenSSL configuration:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Client-side configuration.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_OpenSsl</span><span class="special">);</span>
+
+<span class="comment">// Certificate validation - provide certificate authority certificate. OpenSSL will verify 
+</span><span class="comment">// the server certificate against the provided CA certificate.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">CertificatePtr</span> <span class="identifier">caCertPtr</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">PemCertificate</span><span class="special">(</span><span class="string">"/path/to/caCertificate.pem"</span><span class="special">,</span> <span class="string">""</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setCaCertificate</span><span class="special">(</span><span class="identifier">caCertPtr</span><span class="special">);</span>
+
+<span class="comment">// Certificate validation - custom certificate validation callback.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setCertificateValidationCallback</span><span class="special">(</span><span class="identifier">onValidateCertificate</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Here is an example of certificate configuration using Schannel:
+        </p>
+<p>
+          Server-side Schannel configuration:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Server-side configuration.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoServer</span> <span class="identifier">server</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="identifier">server</span><span class="special">.</span><span class="identifier">setSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_Schannel</span><span class="special">);</span>
+
+<span class="identifier">RCF</span><span class="special">::</span><span class="identifier">CertificatePtr</span> <span class="identifier">certPtr</span><span class="special">(</span> <span class="keyword">new</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">PfxCertificate</span><span class="special">(</span>
+    <span class="string">"/path/to/certificate.pfx"</span><span class="special">,</span> 
+    <span class="string">"password"</span><span class="special">,</span>
+    <span class="string">"certificate name"</span><span class="special">)</span> <span class="special">);</span>
+
+<span class="comment">// Set the certificate that this server will present to clients.
+</span><span class="identifier">server</span><span class="special">.</span><span class="identifier">setCertificate</span><span class="special">(</span><span class="identifier">certPtr</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+<p>
+          Client-side Schannel configuration:
+        </p>
+<p>
+          
+</p>
+<pre class="programlisting"><span class="comment">// Client-side configuration.
+</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">RcfProtoChannel</span> <span class="identifier">channel</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">TcpEndpoint</span><span class="special">(</span><span class="number">50001</span><span class="special">)</span> <span class="special">);</span>
+<span class="identifier">channel</span><span class="special">.</span><span class="identifier">setSslImplementation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">Si_Schannel</span><span class="special">);</span>
+
+<span class="comment">// Certificate validation - use default Schannel validation. Schannel will check that 
+</span><span class="comment">// the server certificate matches the provided name, and that a corresponding certificate 
+</span><span class="comment">// authority is present in the Windows "Trusted Root Certification Authorities" 
+</span><span class="comment">// certificate store.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setEnableSchannelCertificateValidation</span><span class="special">(</span><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">toTstring</span><span class="special">(</span><span class="string">"certificate name"</span><span class="special">));</span>
+
+<span class="comment">// Certificate validation - custom certificate validation callback.
+</span><span class="identifier">channel</span><span class="special">.</span><span class="identifier">setCertificateValidationCallback</span><span class="special">(</span><span class="identifier">onValidateCertificate</span><span class="special">);</span>
+</pre>
+<p>
+        </p>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2005 - 2015 Delta V Software</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="Intro.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="AppendixBuilding.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

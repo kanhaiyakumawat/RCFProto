@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delta V Software - RCFProto Library</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../asset/js/jquery.js"></script>
+	<script src="../asset/js/bootstrap.min.js"></script>
+	<script src="../asset/js/prettify.min.js"></script>	
+	<script src="../asset/js/ko.js"></script>
+	<script src="../asset/js/ko-ext-template-engine.js"></script>
+
+	<!-- Bootstrap -->
+	<link href="../asset/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/font-awesome.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/prettify.css" rel="stylesheet" media="screen">
+	
+	
+	<link href="../asset/css/site.css"  rel="stylesheet" media="screen"> />
+	<style type="text/css">
+	</style>
+		
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="container">
+
+		<br />
+		<br />
+		<div class="row">
+			<div class="span3 affix">
+				<img src='../asset/DVSLogo.png'> </img>
+			</div>
+
+			<div id="top_navigation"></div>
+
+	
+
+
+		</div>
+
+
+		<!-- Docs nav
+    ================================================== -->
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix">
+					<li><a href="#overview"><i class="icon-chevron-right"></i>RCFProto Python Demo</a></li>
+					<li><a href="#installing"><i class="icon-chevron-right"></i>Installing RCFProto</a></li>
+                    <li><a href="#running"><i class="icon-chevron-right"></i>Running</a></li>
+				</ul>
+			</div>
+
+			<div class="span9">
+
+				<section id="overview">
+					<h3>RCFProto Python Demo</h3>
+					This section describes how to build and run the RCFProto Python demo server and client, on Windows. You will need the Win32 binary distribution to follow these steps. 
+                    <br />
+                    <br />
+                    RCFProto is currently only supported on Python 2.6 and Python 2.7.
+				</section>
+
+				<section id="installing">
+					<!-- <h3>Python</h3> -->
+					<div class="content">
+					<h5>Installing RCFProto using setup.py</h5>
+
+                        <div class="indent-40px" >
+
+                        <ul>
+
+                        <li>From the root directory of the distribution, change directory to the src directory:
+                        </li>
+                        <br />
+                        <code class="prettyprint">cd python\src
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Install the RCFProto Python module (and Google.ProtocolBuffers, if not already installed):
+                        </li>
+                        <br />
+                        <code class="prettyprint">python setup.py install
+                        </code>
+                        <br />
+                        <br />
+
+                        </ul>
+                        </div>
+
+                        <b>Installing RCFProto using easy_install</b>
+
+                        <div class="indent-40px" >
+                            
+                            <br />
+
+                            As an alternative to setup.py, the Win32 distribution provides 4 Python eggs, for use with easy_install. To install these, you will need to know the version and architecture of your Python interpreter:
+
+						<ul>
+                            <br />
+
+							<li>For 32 bit Python 2.6:
+                            </li>
+							<br />
+							<code class="prettify" >easy_install --allow-hosts=*.python.org bin\x86\rcfproto-1.0-py2.6.egg
+							</code>
+							<br />
+                            <br />
+
+                            <li>For 64 bit Python 2.6:
+                            </li>
+							<br />
+							<code class="prettify" >easy_install --allow-hosts=*.python.org bin\x64\rcfproto-1.0-py2.6.egg
+							</code>
+							<br />
+                            <br />
+
+							<li>For 32 bit Python 2.7:
+                            </li>
+							<br />
+							<code class="prettify" >easy_install --allow-hosts=*.python.org bin\x86\rcfproto-1.0-py2.7.egg
+							</code>
+							<br />
+                            <br />
+
+							<li> For 64 bit Python 2.7:
+                            </li>
+							<br />
+							<code class="prettify" >easy_install --allow-hosts=*.python.org bin\x64\rcfproto-1.0-py2.7.egg
+							</code>
+
+                            <br />
+                            <br />
+
+						</ul>
+
+					</div>
+
+                </section>
+                
+                <section id="running">
+
+                    <h5>Running the Python demo server and client</h5>
+
+                    <div class="indent-40px" >
+
+                        <ul>
+
+                        <br />
+
+                        <li>From the root directory of the distribution, change directory to the demo directory:
+                        </li>
+                        <br />
+                        <code class="prettyprint">cd python\demo
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Generate source code for Protocol Buffer messages:
+                        </li>
+                        <br />
+                        <code class="prettyprint">..\bin\protoc.exe Demo.proto --python_out=.
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Run the demo server:
+                        </li>
+                        <br />
+                        <code class="prettyprint">python DemoServer.py
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Run the demo client (in a different command prompt):
+                        </li>
+                        <br />
+                        <code class="prettyprint">python DemoClient.py
+                        </code>
+                        <br />
+                        <br />
+
+                        </ul>
+                    </div>
+				</section>
+
+				<hr>
+			</div>
+            </div>
+		</div>
+		<!-- end row -->
+
+		<div class="footer">
+			<p>&copy; Delta V Software 2013</p>
+		</div>
+	<!-- /container -->
+
+</body>
+
+
+<script>
+	ko.applyBindings(this);
+
+</script>
+
+<script src="../components/menu.js"></script>
+</html>

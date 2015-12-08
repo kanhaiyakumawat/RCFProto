@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delta V Software - RCFProto Library</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../asset/js/jquery.js"></script>
+	<script src="../asset/js/bootstrap.min.js"></script>
+	<script src="../asset/js/prettify.min.js"></script>
+	<script src="../asset/js/ko.js"></script>
+	<script src="../asset/js/ko-ext-template-engine.js"></script>
+
+	<!-- Bootstrap -->
+	<link href="../asset/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/font-awesome.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/prettify.css" rel="stylesheet" media="screen">
+
+	<link href="../asset/css/site.css" rel="stylesheet" media="screen">
+	/>
+		
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="container">
+
+		<br />
+		<br />
+		<div class="row">
+			<div class="span3 affix">
+				<img src='../asset/DVSLogo.png'> </img>
+			</div>
+
+			<div id="top_navigation"></div>
+
+
+
+
+		</div>
+
+
+		<!-- Docs nav
+    ================================================== -->
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix">
+					<li><a href="#overview"><i class="icon-chevron-right"></i>RCFProto C++ Demo</a></li>
+					<li><a href="#prerequisites"><i class="icon-chevron-right"></i>Prerequisites  </a></li>
+					<li><a href="#solution"><i class="icon-chevron-right"></i>Visual Studio Solution</a></li>
+					<li><a href="#build-settings"><i class="icon-chevron-right"></i>Build Settings</a></li>
+					<li><a href="#building"><i class="icon-chevron-right"></i>Building</a></li>
+					<li><a href="#running"><i class="icon-chevron-right"></i>Running</a></li>
+				</ul>
+			</div>
+
+			<div class="span9">
+
+				<section id="overview">
+					<h3>RCFProto C++ Demo</h3>
+					This section describes how to build and run the RCFProto C++ demo server and client, on Windows, using Visual Studio. You will need the Win32 binary distribution to follow these steps. 
+				</section>
+
+				<section id="prerequisites">
+					<h5>Prerequisites</h5>
+                    <div class="indent-40px" >
+					<ul>
+						<li>Download and unzip <a href="http://www.boost.org">Boost</a> to a local directory, e.g. <tt>C:\boost_1_49_0</tt>. </li>
+						<li>Download and unzip <a href="http://code.google.com/p/protobuf/">Protocol Buffers</a> to a local directory, e.g. <tt>C:\protobuf-2.4.1</tt></li>
+                        <li>Build <tt>libprotobuf.lib</tt>, by opening protobuf.sln (e.g. <tt>C:\protobuf-2.4.1\vsprojects\protobuf.sln</tt>) in Visual Studio and building the libprotobuf project. Make sure you use the same version of Visual Studio that you will use to build RCFProto.</li>
+					</ul>
+                    </div>
+				</section>
+
+				<section id="solution">
+					<h5>Visual Studio Solution</h5>
+					<div class="indent-40px">
+					    From Visual Studio, open <tt>cpp\vs2008\demo\RCFProtoDemo.sln</tt>.
+                        If you are using a Visual Studio version newer than Visual Studio 2008, you will be prompted to upgrade the solution.
+                        The demo solution contains three projects (DemoClient, DemoServer and RCFProto):                      
+
+						<div style="padding: 20px; text-align: center">
+							<img src="../asset/img/cpp-sln.png" /><br />
+							<b>Projects in the solution</b>
+						</div>
+
+
+					</div>
+					<!-- end content -->
+
+
+				</section>
+
+				<section id="build-settings">
+					<h5>Build Settings</h5>
+
+                    <div class="indent-40px">
+
+                    <ul>
+                    <li>Before building the solution, make sure the include directories and library directories for all 3 projects, match your own installation paths for Boost and Protocol Buffers.
+                    </li>
+
+                    <li>The include directories for each project must include Boost (e.g. <tt>C:\boost_1_49_0</tt>) and Protocol Buffers (e.g. <tt>C:\protobuf-2.4.1\src</tt>).
+                    </li>
+
+                    <li>The library directories for each project must include the path to <tt>libprotobuf.lib</tt> (e.g. <tt>C:\protobuf-2.4.1\vsprojects\Debug</tt>).</li>
+
+                    <li>Include directories and library directories are configured in the Visual Studio project properties:
+
+					<br />
+
+					<div style="padding: 20px; text-align: center">
+						<img src="../asset/img/cpp-set-include-demo.png" />
+						<b>Configuring Additional Include Directories (Boost and Protocol Buffers)</b>
+					</div>
+
+					<div style="padding: 20px; text-align: center">
+						<img src="../asset/img/cpp-set-include-linker-demo.png" />
+						<b>Configuring Additional Library Directories (Protocol Buffers)</b>
+					</div>
+
+                    </li>
+                    </ul>
+
+                    </div>
+
+				</section>
+
+				<section id="building">
+					<h5>Building</h5>
+
+                    <div class="indent-40px">
+
+					To build, right click on the solution in Visual Studio and press Build. A pre-build event will run protoc.exe to generate <tt>Demo.pb.cc</tt> (containing source code for Protocol Buffer messages), and the projects will then be built. Your output window should look similar to this:
+
+					<div style="padding: 20px; text-align: center">
+						<img src="../asset/img/cpp-output-window.png" />
+						<b>Output on successful build</b>
+					</div>					
+
+                    </div>
+
+				</section>
+
+
+				<section id="running">
+					<h5>Running the C++ demo server and client</h5>
+                    
+                    <div class="indent-40px">
+                    
+                    <ul>
+
+                    <li>From the root directory of the distribution, cd to the build output location:
+                    </li>
+                    <br />
+                    <code class="prettyprint">cd cpp\demo\vs2008\Debug
+                    </code>
+                    <br />
+                    <br />
+
+                    <li>Run the demo server:
+                    </li>
+                    <br />
+                    <code class="prettyprint">DemoServer.exe
+                    </code>
+                    <br />
+                    <br />
+
+                    <li>Run the demo client (in a different command prompt):
+                    </li>
+                    <br />
+                    <code class="prettyprint">DemoClient.exe
+                    </code>
+                    <br />
+                    <br />
+
+                    </ul>
+                    
+                    </div>
+
+				</section>
+
+				<hr>
+			</div>
+
+		</div>
+		<!-- end row -->
+
+		<div class="footer">
+			<p>&copy; Delta V Software 2013</p>
+		</div>
+	</div>
+	<!-- /container -->
+
+</body>
+
+
+<script>
+	ko.applyBindings(this);
+</script>
+
+<script src="../components/menu.js"></script>
+</html>

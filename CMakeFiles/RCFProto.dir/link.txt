@@ -1,0 +1,2 @@
+/usr/bin/ar cr libRCFProto.a  CMakeFiles/RCFProto.dir/cpp/src/RCFProto.cpp.o
+/usr/bin/ranlib libRCFProto.a

@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC  -fPIC -fPIC -O3 -DNDEBUG   -shared -Wl,-soname,libRCFProto_Java_impl.so -o libRCFProto_Java_impl.so CMakeFiles/RCFProto_Java_impl.dir/cpp/src/swig/RCFProto_Java_impl.cpp.o -lRCFProto -lprotobuf -lpthread -lpthread -ldl

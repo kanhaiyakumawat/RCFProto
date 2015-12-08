@@ -1,0 +1,35 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="#">RCFProto</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li data-bind="attr:{class: $data == 'index'? 'active': '' }"><a href="index.html">Home</a></li>
+					<li><a href="#about">Release Notes</a></li>
+
+					<li data-bind="attr:{class: $data == 'get_start_csharp_java_python'? 'active dropdown': ' dropdown' }">
+						<!--<a href="getting_started.html">Getting Started</a>-->
+						<a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">Getting Started</a>
+						<ul class="dropdown-menu" role="menu">
+
+							<li role="presentation"><a role="menuitem" href="getting_started.html" tabindex="-1" href="#">C#, Java, Python </a></li>
+							<li role="presentation" class="divider"></li>
+							<li role="presentation"><a role="menuitem" href="rcfProtoBuildFromSrc_windows.html" tabindex="-1" href="#">Building RCFProto on Windows </a></li>							
+							<li role="presentation"><a role="menuitem" href="rcfProtoBuildFromSrc_linux.html" tabindex="-1" href="#">Building RCFProto on Linux</a></li>
+							
+							
+
+						</ul>
+
+					</li>
+
+					<li><a href="#">Documentation</a></li>
+					<!-- todo: make this a drop down button -->
+					<li><a href="http://www.deltavsoft.com/forums/">Forum</a></li>
+					<li><a href="http://www.deltavsoft.com/IssueTracker/">Issue Tracker</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</div>

@@ -1,0 +1,1 @@
+/usr/bin/c++    -fPIC -fPIC -O3 -DNDEBUG    CMakeFiles/DemoServerCpp.dir/cpp/demo/DemoServer.cpp.o CMakeFiles/DemoServerCpp.dir/demo_cpp/Demo.pb.cc.o  -o DemoServerCpp -rdynamic libRCFProto.a libRCF.a -lprotobuf -lpthread -lpthread -ldl 

@@ -1,0 +1,1133 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>deltavsoft.rcfproto.RcfProtoChannel</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="deltavsoft-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.deltavsoft.com">RCFProto</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="deltavsoft-module.html">Package&nbsp;deltavsoft</a> ::
+        <a href="deltavsoft.rcfproto-module.html">Module&nbsp;rcfproto</a> ::
+        Class&nbsp;RcfProtoChannel
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="deltavsoft.rcfproto.RcfProtoChannel-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class RcfProtoChannel</h1><p class="nomargin-top"><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel">source&nbsp;code</a></span></p>
+<pre class="base-tree">
+google.protobuf.service.RpcChannel --+
+                                     |
+                                    <strong class="uidshort">RcfProtoChannel</strong>
+</pre>
+
+<hr />
+<p>Represents a single RPC connection to a server.</p>
+
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Instance Methods</span></td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Constructs a RPC channel from an endpoint.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#Failed" class="summary-sig-name">Failed</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      After a call has finished, returns true if the call failed.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.Failed">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="ErrorText"></a><span class="summary-sig-name">ErrorText</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      If Failed() is true, returns a human-readable description of the 
+      error.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.ErrorText">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#StartCancel" class="summary-sig-name">StartCancel</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Advises the RPC system that the caller desires that the RPC call be 
+      canceled.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.StartCancel">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="Completed"></a><span class="summary-sig-name">Completed</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.Completed">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="Connect"></a><span class="summary-sig-name">Connect</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Connects to the server.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.Connect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="Disconnect"></a><span class="summary-sig-name">Disconnect</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Disconencts from the server.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.Disconnect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetRemoteCallTimeoutMs"></a><span class="summary-sig-name">SetRemoteCallTimeoutMs</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the remote call timeout value, in milliseconds.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetRemoteCallTimeoutMs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetRemoteCallTimeoutMs"></a><span class="summary-sig-name">GetRemoteCallTimeoutMs</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the remote call timeout value, in milliseconds.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetRemoteCallTimeoutMs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetConnectTimeoutMs"></a><span class="summary-sig-name">SetConnectTimeoutMs</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the connect timeout value, in milliseconds.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetConnectTimeoutMs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetConnectTimeoutMs"></a><span class="summary-sig-name">GetConnectTimeoutMs</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the connect timeout value, in milliseconds.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetConnectTimeoutMs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetTransportProtocol"></a><span class="summary-sig-name">SetTransportProtocol</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the transport protocol being used by the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetTransportProtocol">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetTransportProtocol"></a><span class="summary-sig-name">GetTransportProtocol</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the transport protocol being used by the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetTransportProtocol">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetAsynchronousRpcMode" class="summary-sig-name">SetAsynchronousRpcMode</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the asynchronous RPC mode.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetAsynchronousRpcMode">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetAsynchronousRpcMode"></a><span class="summary-sig-name">GetAsynchronousRpcMode</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the asynchronous RPC mode.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetAsynchronousRpcMode">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetPingBackIntervalMs" class="summary-sig-name">SetPingBackIntervalMs</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the ping back interval of the connection, in milliseconds.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetPingBackIntervalMs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetPingBackIntervalMs"></a><span class="summary-sig-name">GetPingBackIntervalMs</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the ping back interval of the connection.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetPingBackIntervalMs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetHttpProxy" class="summary-sig-name">SetHttpProxy</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the network address of the HTTP proxy server, through which to 
+      route remote calls.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetHttpProxy">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetHttpProxy"></a><span class="summary-sig-name">GetHttpProxy</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the network address of the HTTP proxy server.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetHttpProxy">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetHttpProxyPort" class="summary-sig-name">SetHttpProxyPort</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the port number of the HTTP proxy server, through which to route
+      remote calls.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetHttpProxyPort">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetHttpProxyPort"></a><span class="summary-sig-name">GetHttpProxyPort</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the port number of the HTTP proxy server.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetHttpProxyPort">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetTransportType"></a><span class="summary-sig-name">GetTransportType</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the transport type of the connection.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetTransportType">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetUsername" class="summary-sig-name">SetUsername</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the Windows username to use when connecting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetUsername">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetUsername"></a><span class="summary-sig-name">GetUsername</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the Windows username to use when connecting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetUsername">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetPassword" class="summary-sig-name">SetPassword</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the Windows password to use when connecting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetPassword">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetPassword"></a><span class="summary-sig-name">GetPassword</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the Windows password to use when connecting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetPassword">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetKerberosSpn" class="summary-sig-name">SetKerberosSpn</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the Kerberos SPN to use when connecting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetKerberosSpn">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetKerberosSpn"></a><span class="summary-sig-name">GetKerberosSpn</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the Kerberos SPN to use when connecting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetKerberosSpn">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetEnableCompression"></a><span class="summary-sig-name">SetEnableCompression</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the transport level compression setting for this connection.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetEnableCompression">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetEnableCompression"></a><span class="summary-sig-name">GetEnableCompression</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns the transport level compression setting for this connection.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetEnableCompression">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetCertificate"></a><span class="summary-sig-name">SetCertificate</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the SSL certificate for the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetCertificate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetCertificate"></a><span class="summary-sig-name">GetCertificate</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the SSL certificate for the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetCertificate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetCaCertificate"></a><span class="summary-sig-name">SetCaCertificate</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the certificate authority for the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetCaCertificate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetCaCertificate"></a><span class="summary-sig-name">GetCaCertificate</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the certificate authority for the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetCaCertificate">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetOpenSslCipherSuite" class="summary-sig-name">SetOpenSslCipherSuite</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the OpenSSL cipher suite.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetOpenSslCipherSuite">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetOpenSslCipherSuite"></a><span class="summary-sig-name">GetOpenSslCipherSuite</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the OpenSSL cipher suite.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetOpenSslCipherSuite">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="deltavsoft.rcfproto.RcfProtoChannel-class.html#SetEnableSchannelCertificateValidation" class="summary-sig-name">SetEnableSchannelCertificateValidation</a>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the Schannel certificate validation setting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetEnableSchannelCertificateValidation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetEnableSchannelCertificateValidation"></a><span class="summary-sig-name">GetEnableSchannelCertificateValidation</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the Schannel certificate validation setting.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetEnableSchannelCertificateValidation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetSslImplementation"></a><span class="summary-sig-name">SetSslImplementation</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">*args</span>)</span><br />
+      Sets the SSL implementation to be used by the channel.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetSslImplementation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetSslImplementation"></a><span class="summary-sig-name">GetSslImplementation</span>(<span class="summary-sig-arg">self</span>)</span><br />
+      Gets the SSL implementation.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetSslImplementation">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="CallMethod"></a><span class="summary-sig-name">CallMethod</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">methodDesc</span>,
+        <span class="summary-sig-arg">controller</span>,
+        <span class="summary-sig-arg">request</span>,
+        <span class="summary-sig-arg">responsePrototype</span>,
+        <span class="summary-sig-arg">done</span>)</span><br />
+      Gets the certificate validation callback.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.CallMethod">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="GetResponse"></a><span class="summary-sig-name">GetResponse</span>(<span class="summary-sig-arg">self</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.GetResponse">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="SetCertificateValidationCallback"></a><span class="summary-sig-name">SetCertificateValidationCallback</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">certValidationCallback</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetCertificateValidationCallback">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td align="left" colspan="2" class="table-header">
+    <span class="table-header">Method Details</span></td>
+</tr>
+</table>
+<a name="Failed"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">Failed</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.Failed">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>After a call has finished, returns true if the call failed.  The 
+  possible reasons for failure depend on the RPC implementation.  Failed() 
+  must not be called before a call has finished.  If Failed() returns true,
+  the contents of the response message are undefined.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="StartCancel"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">StartCancel</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.StartCancel">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Advises the RPC system that the caller desires that the RPC call be 
+  canceled.  The RPC system may cancel it immediately, may wait awhile and 
+  then cancel it, or may not even cancel the call at all.  If the call is 
+  canceled, the &quot;done&quot; callback will still be called and the 
+  RpcController will indicate that the call failed at that time.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetAsynchronousRpcMode"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetAsynchronousRpcMode</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetAsynchronousRpcMode">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the asynchronous RPC mode. By default the asynchronous RPC mode 
+  is false.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetPingBackIntervalMs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetPingBackIntervalMs</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetPingBackIntervalMs">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the ping back interval of the connection, in milliseconds. Ping 
+  backs are sent from the server back to the client, while a remote call is
+  in progress.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetHttpProxy"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetHttpProxy</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetHttpProxy">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the network address of the HTTP proxy server, through which to 
+  route remote calls. Only valid when using a HTTP or HTTPS endpoint.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetHttpProxyPort"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetHttpProxyPort</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetHttpProxyPort">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the port number of the HTTP proxy server, through which to route 
+  remote calls. Only valid when using a HTTP or HTTPS endpoint.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetUsername"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetUsername</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetUsername">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the Windows username to use when connecting. Only valid for NTLM 
+  and Kerberos transport protocols.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetPassword"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetPassword</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetPassword">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the Windows password to use when connecting. Only valid for NTLM 
+  and Kerberos transport protocols.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetKerberosSpn"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetKerberosSpn</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetKerberosSpn">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the Kerberos SPN to use when connecting. Only valid for Kerberos 
+  transport protocols.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetOpenSslCipherSuite"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetOpenSslCipherSuite</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetOpenSslCipherSuite">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the OpenSSL cipher suite. Only applicable when using OpenSSL as 
+  the SSL implementation.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="SetEnableSchannelCertificateValidation"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">SetEnableSchannelCertificateValidation</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">*args</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="deltavsoft.rcfproto-pysrc.html#RcfProtoChannel.SetEnableSchannelCertificateValidation">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Sets the Schannel certificate validation setting. Only applicable when
+  using Schannel as the SSL implementation. If this setting is non-empty, 
+  it will be used by Schannel to automatically validate peer 
+  certificates.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="deltavsoft-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="http://www.deltavsoft.com">RCFProto</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

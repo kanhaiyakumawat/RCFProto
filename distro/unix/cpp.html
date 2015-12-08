@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delta V Software - RCFProto Library</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../asset/js/jquery.js"></script>
+	<script src="../asset/js/bootstrap.min.js"></script>
+	<script src="../asset/js/prettify.min.js"></script>	
+	<script src="../asset/js/ko.js"></script>
+	<script src="../asset/js/ko-ext-template-engine.js"></script>
+
+	<!-- Bootstrap -->
+	<link href="../asset/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/font-awesome.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/prettify.css" rel="stylesheet" media="screen">
+
+	<link href="../asset/css/site.css"  rel="stylesheet" media="screen"> />
+		
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="container">
+
+		<br />
+		<br />
+		<div class="row">
+			<div class="span3 affix">
+				<img src='../asset/DVSLogo.png'> </img>
+			</div>
+
+			<div id="top_navigation"></div>
+
+	
+
+
+		</div>
+
+
+		<!-- Docs nav
+    ================================================== -->
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix">
+					<li><a href="#overview"><i class="icon-chevron-right"></i>RCFProto C++ Demo</a></li>
+					<li><a href="#prerequisites"><i class="icon-chevron-right"></i>Prerequisites</a></li>
+                    <li><a href="#generating"><i class="icon-chevron-right"></i>Generating</a></li>
+                    <li><a href="#building"><i class="icon-chevron-right"></i>Building</a></li>
+                    <li><a href="#running"><i class="icon-chevron-right"></i>Running</a></li>
+				</ul>
+			</div>
+
+			<div class="span9">
+
+				<section id="overview">
+					<h3>RCFProto C++ Demo</h3>
+					This section describes how to build and run the RCFProto C++ demo server and client, on Unix platforms, using command line tools. You will need the source distribution to follow these steps.
+				</section>
+	
+
+				<section id="prerequisites">
+					<!-- <h3>Prerequisites</h3> -->
+					<div class="content">
+
+                        <h5>Prerequisites</h5>
+
+                        <div class="indent-40px" >
+                        
+                        Make sure you have the following prerequisites installed. The commands listed below show how to install the prerequisites on <a href="http://www.ubuntu.com/">Ubuntu Linux</a>.
+						
+                        <ul>
+
+                            <br />
+
+							<li><a href="http://www.boost.org">Boost</a>:
+							</li>
+							<br />
+							<code class="prettyprint">sudo apt-get install libboost-dev
+							</code>
+							<br />
+							<br />
+
+                            <li><a href="http://code.google.com/p/protobuf/">Protocol Buffers</a> C++ library (libprotobuf.so):
+							</li>
+							<br />
+							<code class="prettyprint">sudo apt-get install libprotobuf-dev
+							</code>
+							<br />
+							<br />
+
+                            <li><a href="http://zlib.net/">zlib</a>:
+							</li>
+							<br />
+							<code class="prettyprint">sudo apt-get install zlib1g-dev
+							</code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://www.openssl.org/">OpenSSL</a>:
+							</li>
+							<br />
+                            <code class="prettyprint">sudo apt-get install libssl-dev
+							</code>
+							<br />
+							<br />
+
+                        </ul>
+
+                        </div>
+
+                        </section>
+
+                <section id="generating">
+
+                        <h5>Generate source code for demo Protocol Buffer messages (Demo.pb.cc)</h5>
+
+                        <div class="indent-40px" >
+
+                        <ul>
+                        <li>From the root directory of the distribution, cd to the demo directory:
+                        </li>
+						<br />
+						<code class="prettyprint">cd cpp/demo
+						</code>
+						<br />
+						<br />
+
+                        <li>Run protoc to generate <tt>Demo.pb.cc</tt>:
+                        </li>
+						<br />
+						<code class="prettyprint">protoc Demo.proto --cpp_out=. 
+						</code>
+						<br />
+						<br />
+                        </ul>
+
+                        </div>
+
+                    </section>
+
+                <section id="building">
+
+                        <h5>Building the C++ demo server and client, using make</h5>
+
+                        <div class="indent-40px" >
+
+                        A simple makefile is provided in the source distribution, for building the C++ demo.
+
+						<ul>
+
+                            <br />
+                            <li>From the root directory of the distribution, cd to the demo makefile directory:
+                            </li>
+							<br />
+							<code class="prettyprint">cd cpp/demo/make
+							</code>
+							<br />
+							<br />
+
+                            <li>Run make, to build <tt>DemoServer</tt>, <tt>DemoClient</tt> and <tt>libRCFProto.so</tt>:
+                            </li>
+							<br />
+							<code class="prettyprint">make
+							</code>
+							<br />
+							<br />
+
+                            <li>Install <tt>libRCFProto.so</tt>, so the system can find it:
+                            </li>
+							<br />
+							<code class="prettyprint">cp libRCFProto.so /usr/lib
+							</code>
+							<br />
+							<br />
+
+                        </ul>
+
+                        </div>
+
+
+                        <h5>Building the C++ demo server and client, using g++</h5>
+
+                        <div class="indent-40px" >
+
+                        Alternatively, instead of using the provided makefile, you can build the demo server and demo client directly with g++.
+
+                        <ul>
+                            
+                            <br />
+
+                            <li>From the root directory of the distribution, cd to the demo directory:
+                            </li>
+							<br />
+							<code class="prettyprint">cd cpp/demo
+							</code>
+							<br />
+							<br />
+
+
+                            <li>Build the demo server:</li>
+					        <br />
+					        <code class="prettyprint">g++ -oDemoServer DemoServer.cpp Demo.pb.cc ../src/RCFProto.cpp ../src/RCF/src/RCF/RCF.cpp -DRCF_USE_ZLIB -DRCF_USE_OPENSSL -I../src -I../src/RCF/include -lpthread -lprotobuf -ldl
+					        </code>
+					        <br />
+					        <br />
+
+                            <li>Build the demo client:</li>
+					        <br />
+					        <code class="prettyprint">g++ -oDemoClient DemoClient.cpp Demo.pb.cc ../src/RCFProto.cpp ../src/RCF/src/RCF/RCF.cpp -DRCF_USE_ZLIB -DRCF_USE_OPENSSL -I../src -I../src/RCF/include -lpthread -lprotobuf -ldl
+					        </code>
+					        <br />
+					        <br />
+
+                        </ul>
+
+                        </div>
+
+                    </section>
+
+                <section id="running">
+
+                        <h5>Running the C++ demo server and client</h5>
+
+                        <div class="indent-40px" >
+
+                        <ul>
+
+                        <li>Run the demo server:
+                        </li>
+                        <br />
+                        <code class="prettyprint">./DemoServer
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Run the demo client (in a different command prompt):
+                        </li>
+                        <br />
+                        <code class="prettyprint">./DemoClient
+                        </code>
+                        <br />
+                        <br />
+
+                        </ul>
+
+                        </div>
+
+                </section>
+                    
+                </div>
+
+					<!-- end content -->
+
+				
+
+				<hr>
+			</div>
+
+		</div>
+		<!-- end row -->
+
+		<div class="footer">
+			<p>&copy; Delta V Software 2013</p>
+		</div>
+	</div>
+	<!-- /container -->
+
+</body>
+
+
+<script>
+	ko.applyBindings(this);
+</script>
+
+<script src="../components/menu.js"></script>
+</html>

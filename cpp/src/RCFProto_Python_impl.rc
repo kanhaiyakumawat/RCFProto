@@ -1,0 +1,8 @@
+
+#include "RCFProtoVersion.hpp"
+
+#ifndef APSTUDIO_INVOKED
+
+RCFPROTO_VERSION_INFO_DLL("RCFProto_Python_impl.dll", "RCFProto Python binding library.")
+
+#endif    // not APSTUDIO_INVOKED

@@ -1,0 +1,2 @@
+/usr/bin/ar cr libRCF.a  CMakeFiles/RCF.dir/cpp/src/RCF/src/RCF/RCF.cpp.o
+/usr/bin/ranlib libRCF.a

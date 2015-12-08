@@ -1,0 +1,262 @@
+
+################################################################################
+### RCFProto Python build
+################################################################################
+
+# Function to build and test a Python egg for a specific Python version.
+FUNCTION(BUILD_AND_TEST_PYTHON_EGG PYVER PYINSTALLDIR EGGNAME)
+
+	MESSAGE("Building Python egg for Python " ${PYVER} " (with Python interpreter from " ${PYINSTALLDIR} ")" )
+
+	IF (${PYVER} MATCHES 26)
+		SET(PYVER_DOTTED 2.6)
+	ELSE()
+		SET(PYVER_DOTTED 2.7)
+	ENDIF()
+
+	ADD_LIBRARY(
+		RCFProto_Python_impl_${PYVER}
+		SHARED
+		cpp/src/swig/RCFProto_Python_impl.cpp
+		${RCF_ROOT}/src/RCF/BoostFilesystem.cpp
+		${RCF_ROOT}/src/RCF/BoostSystem.cpp )
+
+	SET_TARGET_PROPERTIES(
+		RCFProto_Python_impl_${PYVER}
+		PROPERTIES COMPILE_FLAGS -I${PYINSTALLDIR}/include
+	)
+ 
+	TARGET_LINK_LIBRARIES(RCFProto_Python_impl_${PYVER} RCFProto RCF ${RCFPROTO_LINKER_INPUT} ${PYINSTALLDIR}/libs/python${PYVER}.lib )
+
+	SET_SOURCE_FILES_PROPERTIES(${LIBRARY_OUTPUT_PATH}/RCFProto_Python_impl_${PYVER}.dll PROPERTIES GENERATED TRUE)
+
+	# Create egg dir.
+	ADD_CUSTOM_TARGET(
+		BuildEgg${PYVER}Dir
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/touch
+		SOURCES				${RCFPROTO_ROOT}/CMakeLists.txt)
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/touch
+		DEPENDS				${RCFPROTO_ROOT}/CMakeLists.txt
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/Py${PYVER}
+		COMMAND				${CMAKE_COMMAND} -E touch ${LIBRARY_OUTPUT_PATH}/Py${PYVER}/touch )
+
+	FILE(GLOB_RECURSE PYTHON_SOURCES_RCFPROTO ${RCFPROTO_ROOT}/python/src/*.py)
+
+	# Build egg
+	ADD_CUSTOM_TARGET( 
+		BuildEgg${PYVER}
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/dist/${EGGNAME}
+		SOURCES				${LIBRARY_OUTPUT_PATH}/RCFProto_Python_impl_${PYVER}.dll ${PYTHON_SOURCES_RCFPROTO} )
+
+	ADD_CUSTOM_COMMAND(
+
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/dist/${EGGNAME}
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/RCFProto_Python_impl_${PYVER}.dll ${PYTHON_SOURCES_RCFPROTO}
+
+		# Create the demo dir.
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/Py${PYVER}/demo
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/Py${PYVER}/deltavsoft
+
+		# Copy .py and .pyd files to staging dir.
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/src/setup.py .
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/src/deltavsoft/rcfproto.py			./deltavsoft
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/src/deltavsoft/rcfprotoimpl.py		./deltavsoft
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/src/deltavsoft/util.py				./deltavsoft
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/src/deltavsoft/__init__.py			./deltavsoft
+		COMMAND				${CMAKE_COMMAND} -E copy ${LIBRARY_OUTPUT_PATH}/RCFProto_Python_impl_${PYVER}.dll	./deltavsoft/_rcfproto.pyd
+
+		# Build the egg.
+		COMMAND				${PYINSTALLDIR}/python setup.py build
+		COMMAND				${PYINSTALLDIR}/python setup.py bdist_egg
+
+		# Copy the egg to distro bin folder.
+		COMMAND				${CMAKE_COMMAND} -E make_directory									${RCFPROTO_ROOT}/python/bin/${ARCH}
+		COMMAND				${CMAKE_COMMAND} -E copy dist/rcfproto-1.0-py${PYVER_DOTTED}.egg	${RCFPROTO_ROOT}/python/bin/${ARCH}
+
+		WORKING_DIRECTORY	${LIBRARY_OUTPUT_PATH}/Py${PYVER} )
+
+	ADD_DEPENDENCIES(BuildEgg${PYVER} BuildEgg${PYVER}Dir RCFProto_Python_impl_${PYVER} )
+	ADD_DEPENDENCIES(build BuildEgg${PYVER})
+
+	# Test the egg
+	ADD_CUSTOM_TARGET( 
+		TestEgg${PYVER}
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/demo/PythonTest.stdout.txt
+		SOURCES				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/dist/${EGGNAME})
+
+	ADD_CUSTOM_COMMAND(
+
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/demo/PythonTest.stdout.txt
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/Py${PYVER}/dist/${EGGNAME}
+
+		COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOC_EXECUTABLE} .
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/demo/Demo.proto .
+		COMMAND				${PROTOBUF_PROTOC_EXECUTABLE} Demo.proto --python_out=.
+
+
+		# Create virtual Python environment and install the egg. Will implicitly install protobuf from python.org.
+		COMMAND				${PYINSTALLDIR}/Scripts/virtualenv E1
+		COMMAND				E1/Scripts/easy_install.exe --allow-hosts=*.python.org ../dist/${EGGNAME}
+
+		# Run demo server and client.
+		COMMAND				${RUN_ASYNC_PRE} E1/Scripts/python ${RCFPROTO_ROOT}/python/demo/DemoServer.py  --dllpath . ${RUN_ASYNC_POST}
+		COMMAND				E1/Scripts/python ${RCFPROTO_ROOT}/python/demo/DemoClient.py --dllpath . --delay
+		COMMAND				E1/Scripts/python ${RCFPROTO_ROOT}/python/demo/DemoClient.py --dllpath . > DemoClient.stdout.txt
+		COMMAND				E1/Scripts/python ${RCFPROTO_ROOT}/python/demo/DemoClient.py --dllpath . --shutdown
+		COMMAND				${CMAKE_COMMAND} -E copy DemoClient.stdout.txt PythonTest.stdout.txt
+
+		WORKING_DIRECTORY	${LIBRARY_OUTPUT_PATH}/Py${PYVER}/demo )
+
+	ADD_DEPENDENCIES(TestEgg${PYVER} BuildEgg${PYVER})
+	ADD_DEPENDENCIES(test TestEgg${PYVER})
+
+ENDFUNCTION(BUILD_AND_TEST_PYTHON_EGG)
+
+IF(PY26)
+	SET(PYVER					26 )
+	SET(PYINSTALLDIR			${PY26} )
+	SET(EGGNAME					rcfproto-1.0-py2.6.egg )
+	BUILD_AND_TEST_PYTHON_EGG(	${PYVER} ${PY26} ${EGGNAME} )
+ENDIF()
+
+IF(PY27)
+	SET(PYVER					27 )
+	SET(PYINSTALLDIR			${PY27} )
+	SET(EGGNAME					rcfproto-1.0-py2.7.egg )
+	BUILD_AND_TEST_PYTHON_EGG(	${PYVER} ${PY27} ${EGGNAME} )
+ENDIF()
+
+# Python test target
+
+# We need the path to the Python interpreter. FIND_PACKAGE(PythonInterp) doesn't distinguish between 
+# 32 and 64 bit runtimes, so on Windows we deduce the paths from the Python headers, which *do* 
+# distinguish between 32 and 64 bit.
+IF(MSVC AND PYTHONLIBS_FOUND AND NOT PYTHON_EXECUTABLE)
+
+	MESSAGE("Determining Python interpreter path, based on Python include path, rather than cmake FIND_PACKAGE().")
+
+	LIST(GET PYTHON_INCLUDE_DIRS 0 PYTHON_INCLUDE)
+	SET( PYTHON_EXECUTABLE ${PYTHON_INCLUDE}/../python.exe)
+
+ENDIF()
+
+
+# Set PYTHON_EXECUTABLE, to override what the FIND_PACKAGE() call may do.
+#SET( PYTHON_EXECUTABLE C:/Python27_x64/python.exe )
+FIND_PACKAGE(PythonInterp)
+IF(PYTHONLIBS_FOUND AND PYTHON_EXECUTABLE)
+
+	MESSAGE( "Using Python interpreter: " ${PYTHON_EXECUTABLE} )
+
+	# Create Python demo dir.
+	ADD_CUSTOM_TARGET(
+		PythonDemoDir
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/demo_py/touch
+		SOURCES				${RCFPROTO_ROOT}/CMakeLists.txt)
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/demo_py/touch
+		DEPENDS				${RCFPROTO_ROOT}/CMakeLists.txt
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/demo_py
+		COMMAND				${CMAKE_COMMAND} -E touch ${LIBRARY_OUTPUT_PATH}/demo_py/touch )
+
+	SET( DEMO_PY			${LIBRARY_OUTPUT_PATH}/demo_py )
+	SET( DLLPATH			--dllpath ${LIBRARY_OUTPUT_PATH} --dllpath ${DEMO_PY} --dllpath ${RCFPROTO_ROOT}/python/src )
+
+	SET( 
+		DEMO_PY_SOURCES	
+		${RCFPROTO_ROOT}/python/demo/DemoClient.py 
+		${RCFPROTO_ROOT}/python/demo/DemoServer.py 
+		${RCFPROTO_ROOT}/python/demo/Demo.proto 
+		${RCFPROTO_ROOT}/python/src/deltavsoft/rcfproto.py 
+		${RCFPROTO_ROOT}/python/src/deltavsoft/rcfprotoimpl.py )
+
+	SET( 
+		TEST_PY_SOURCES	
+		${RCFPROTO_ROOT}/python/test/Test_RCFProto.py 
+		${RCFPROTO_ROOT}/python/test/ProtoTest.proto 
+		${RCFPROTO_ROOT}/python/src/deltavsoft/rcfproto.py 
+		${RCFPROTO_ROOT}/python/src/deltavsoft/rcfprotoimpl.py )
+
+
+	############################################################################
+	# Python demo server and client.
+
+	# Build Python demo (run protoc).
+	ADD_CUSTOM_TARGET( 
+		PythonDemoBuild
+		DEPENDS				${DEMO_PY}/Demo_pb2.py
+		SOURCES				${RCFPROTO_ROOT}/python/demo/Demo.proto )
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${DEMO_PY}/Demo_pb2.py
+		DEPENDS				${RCFPROTO_ROOT}/python/demo/Demo.proto
+
+		COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOC_EXECUTABLE} .
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/demo/Demo.proto .
+		COMMAND				${PROTOBUF_PROTOC_EXECUTABLE} Demo.proto --python_out=.
+
+		WORKING_DIRECTORY	${DEMO_PY} )
+
+
+	# Run Python demo.
+	ADD_CUSTOM_TARGET( 
+		PythonDemo
+		DEPENDS				${DEMO_PY}/PythonDemo.stdout.txt
+		SOURCES				${DEMO_PY_SOURCES} )
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${DEMO_PY}/PythonDemo.stdout.txt
+		DEPENDS				${DEMO_PY_SOURCES}
+
+		COMMAND				echo Python demo server commandline: ${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/demo/DemoServer.py ${DLLPATH}
+		COMMAND				echo Python demo client commandline: ${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/demo/DemoClient.py ${DLLPATH}
+
+		COMMAND				${RUN_ASYNC_PRE} ${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/demo/DemoServer.py ${DLLPATH} ${RUN_ASYNC_POST}
+		COMMAND				${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/demo/DemoClient.py ${DLLPATH} --delay
+		COMMAND				${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/demo/DemoClient.py ${DLLPATH} > PythonDemo.stdout.tmp
+		COMMAND				${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/demo/DemoClient.py ${DLLPATH} --shutdown
+		COMMAND				${CMAKE_COMMAND} -E copy PythonDemo.stdout.tmp PythonDemo.stdout.txt
+
+		WORKING_DIRECTORY	${DEMO_PY} )
+
+	ADD_DEPENDENCIES(PythonDemo RCFProto_Python_impl PythonDemoBuild)
+	ADD_DEPENDENCIES(PythonDemoBuild PythonDemoDir)
+	ADD_DEPENDENCIES(build PythonDemoBuild)
+	ADD_DEPENDENCIES(demo PythonDemo)
+
+
+
+	############################################################################
+	# Run Python test.
+
+	IF(EXISTS ${RCFPROTO_ROOT}/python/test)
+
+		ADD_CUSTOM_TARGET( 
+			PythonTest
+			DEPENDS				${DEMO_PY}/PythonTest.stdout.txt
+			SOURCES				${TEST_PY_SOURCES} )
+
+		ADD_CUSTOM_COMMAND(
+			OUTPUT				${DEMO_PY}/PythonTest.stdout.txt
+			DEPENDS				${TEST_PY_SOURCES}
+
+			COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOC_EXECUTABLE} .
+			COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/python/test/ProtoTest.proto .
+			COMMAND				${PROTOBUF_PROTOC_EXECUTABLE} ProtoTest.proto --python_out=.
+
+			COMMAND				echo Python test commandline: ${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/test/Test_RCFProto.py ${DLLPATH}
+			COMMAND				${PYTHON_EXECUTABLE} ${RCFPROTO_ROOT}/python/test/Test_RCFProto.py ${DLLPATH} > PythonTest.stdout.tmp
+			COMMAND				${CMAKE_COMMAND} -E copy PythonTest.stdout.tmp PythonTest.stdout.txt
+
+			WORKING_DIRECTORY	${DEMO_PY} )
+
+		ADD_DEPENDENCIES(PythonTest RCFProto_Python_impl PythonDemoDir)
+		ADD_DEPENDENCIES(test PythonTest)
+
+
+	ENDIF()
+
+ENDIF()

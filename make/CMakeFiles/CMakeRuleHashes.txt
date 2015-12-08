@@ -1,0 +1,13 @@
+# Hashes of file build rules.
+cf7f7ac69f677d008dbaa946e0d98d54 CMakeFiles/CppDemo
+cf7f7ac69f677d008dbaa946e0d98d54 CMakeFiles/CppDemoDir
+cf7f7ac69f677d008dbaa946e0d98d54 CMakeFiles/CppDemoProto
+cf7f7ac69f677d008dbaa946e0d98d54 CMakeFiles/JavaDemo
+cf7f7ac69f677d008dbaa946e0d98d54 CMakeFiles/JavaDemoBuild
+cf7f7ac69f677d008dbaa946e0d98d54 CMakeFiles/RCFProtoJar
+ecfc402a846ee62978a48c0f29b194ab CppDemo.stdout.txt
+c71403945d4c8f2a49d14c737615d2f9 RCFProto.jar
+04ad30ee656883566eb07afa52f41301 demo_cpp/Demo.pb.h
+d1a4d23faaa0e37d371b43406a6bfe1f demo_cpp/touch
+7bbbf369d39c3194c9e6bb4ebc826d73 demo_java/DemoClient.class
+32d37865b7ab21329d44ba8b6acd8a2c demo_java/DemoClient.stdout.txt

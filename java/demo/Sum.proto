@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package kkprotobuf;
+
+option java_package = "com.kanhaiyakumawat.protobuf.generated";
+option java_outer_classname = "SumProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option cc_generic_services = true;
+option optimize_for = SPEED;
+
+
+message SumRequest {
+    required int64 param1 = 1;
+    required int64 param2 = 2;
+}
+
+message SumResponse {
+    required int64 result = 1;
+}
+
+service KKProtBufServ {
+    rpc getSum(SumRequest)
+        returns (SumResponse);
+}
+

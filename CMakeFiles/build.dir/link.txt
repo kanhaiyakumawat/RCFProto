@@ -1,0 +1,2 @@
+/usr/bin/ar cr libbuild.a  CMakeFiles/build.dir/cpp/src/Dummy.cpp.o
+/usr/bin/ranlib libbuild.a

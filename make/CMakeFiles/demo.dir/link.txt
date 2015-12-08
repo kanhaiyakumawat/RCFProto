@@ -1,0 +1,2 @@
+/usr/bin/ar cr libdemo.a  CMakeFiles/demo.dir/cpp/src/Dummy.cpp.o
+/usr/bin/ranlib libdemo.a

@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Appendix - Logging</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.73.2">
+<link rel="start" href="../index.html" title="RCFProto User Guide">
+<link rel="up" href="../index.html" title="RCFProto User Guide">
+<link rel="prev" href="AppendixBuilding.html" title="Appendix - Building RCFProto">
+<link rel="next" href="AppendixReleaseNotes.html" title="Appendix - Release Notes">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="spirit-nav">
+<a accesskey="p" href="AppendixBuilding.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="AppendixReleaseNotes.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="rcfproto_user_guide.appendix___logging"></a><a class="link" href="appendix___logging.html" title="Appendix - Logging">Appendix - Logging</a>
+</h2></div></div></div>
+<p>
+      RCFProto provides a configurable logging subsystem with 4 log levels and several
+      log output options.
+    </p>
+<p>
+      Logging is disabled by default. To enable it, call <code class="computeroutput"><span class="identifier">enableLogging</span><span class="special">()</span></code>:
+    </p>
+<p>
+      
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">enableLogging</span><span class="special">(</span> <span class="identifier">RCF</span><span class="special">::</span><span class="identifier">LogToFile</span><span class="special">(</span><span class="string">"path/to/rcfproto.log"</span><span class="special">),</span> <span class="number">4</span><span class="special">,</span> <span class="string">""</span><span class="special">);</span>
+</pre>
+<p>
+    </p>
+<p>
+      In this case we are setting the log level to 4 (highest), and directing log
+      output to the given log file.
+    </p>
+<p>
+      To disable logging, call <code class="computeroutput"><span class="identifier">disableLogging</span><span class="special">()</span></code>:
+    </p>
+<p>
+      
+</p>
+<pre class="programlisting"><span class="identifier">RCF</span><span class="special">::</span><span class="identifier">disableLogging</span><span class="special">();</span>
+</pre>
+<p>
+    </p>
+<p>
+      Logging can also be directed to the debug window of Visual Studio (<code class="computeroutput"><span class="identifier">LogToDebugWindow</span></code>), the Windows event log
+      (<code class="computeroutput"><span class="identifier">LogToEventLog</span></code>), or standard
+      output (<code class="computeroutput"><span class="identifier">LogToStdout</span></code>). For more
+      information, see the reference documentation for these classes.
+    </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2005 - 2015 Delta V Software</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="AppendixBuilding.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="AppendixReleaseNotes.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

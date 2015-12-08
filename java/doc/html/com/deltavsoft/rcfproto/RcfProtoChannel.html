@@ -1,0 +1,952 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>RcfProtoChannel</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RcfProtoChannel";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../com/deltavsoft/rcfproto/package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/deltavsoft/rcfproto/RCFProto.html" title="class in com.deltavsoft.rcfproto"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../com/deltavsoft/rcfproto/RcfProtoController.html" title="class in com.deltavsoft.rcfproto"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/deltavsoft/rcfproto/RcfProtoChannel.html" target="_top">Frames</a></li>
+<li><a href="RcfProtoChannel.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.deltavsoft.rcfproto</div>
+<h2 title="Class RcfProtoChannel" class="title">Class RcfProtoChannel</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.deltavsoft.rcfproto.RcfProtoChannel</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">RcfProtoChannel</span>
+extends java.lang.Object</pre>
+<div class="block">Represents a single RPC connection to a server.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#RcfProtoChannel(com.deltavsoft.rcfproto.Endpoint)">RcfProtoChannel</a></strong>(<a href="../../../com/deltavsoft/rcfproto/Endpoint.html" title="class in com.deltavsoft.rcfproto">Endpoint</a>&nbsp;endpoint)</code>
+<div class="block">Constructs a RPC channel from an endpoint.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#callMethod(MethodDescriptor, RpcController, Message, Message, )">callMethod</a></strong>(MethodDescriptor&nbsp;method,
+          RpcController&nbsp;controller,
+          Message&nbsp;request,
+          Message&nbsp;responsePrototype,
+          <any>&nbsp;done)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#completed()">completed</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#connect()">connect</a></strong>()</code>
+<div class="block">Connects to the server.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#delete()">delete</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#disconnect()">disconnect</a></strong>()</code>
+<div class="block">Disconencts from the server.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#errorText()">errorText</a></strong>()</code>
+<div class="block">If Failed() is true, returns a human-readable description of the error.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#failed()">failed</a></strong>()</code>
+<div class="block">After a call has finished, returns true if the call failed.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#finalize()">finalize</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getAsynchronousRpcMode()">getAsynchronousRpcMode</a></strong>()</code>
+<div class="block">Gets the asynchronous RPC mode.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a></code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getCaCertificate()">getCaCertificate</a></strong>()</code>
+<div class="block">Gets the certificate authority for the channel.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a></code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getCertificate()">getCertificate</a></strong>()</code>
+<div class="block">Gets the SSL certificate for the channel.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../com/deltavsoft/rcfproto/CertificateValidationCallback.html" title="interface in com.deltavsoft.rcfproto">CertificateValidationCallback</a></code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getCertificateValidationCallback()">getCertificateValidationCallback</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getConnectTimeoutMs()">getConnectTimeoutMs</a></strong>()</code>
+<div class="block">Gets the connect timeout value, in milliseconds.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getEnableCompression()">getEnableCompression</a></strong>()</code>
+<div class="block">Returns the transport level compression setting for this connection.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getEnableSchannelCertificateValidation()">getEnableSchannelCertificateValidation</a></strong>()</code>
+<div class="block">Gets the Schannel certificate validation setting.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getHttpProxy()">getHttpProxy</a></strong>()</code>
+<div class="block">Returns the network address of the HTTP proxy server.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getHttpProxyPort()">getHttpProxyPort</a></strong>()</code>
+<div class="block">Returns the port number of the HTTP proxy server.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getKerberosSpn()">getKerberosSpn</a></strong>()</code>
+<div class="block">Returns the Kerberos SPN to use when connecting.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getOpenSslCipherSuite()">getOpenSslCipherSuite</a></strong>()</code>
+<div class="block">Gets the OpenSSL cipher suite.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getPassword()">getPassword</a></strong>()</code>
+<div class="block">Returns the Windows password to use when connecting.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getPingBackIntervalMs()">getPingBackIntervalMs</a></strong>()</code>
+<div class="block">Returns the ping back interval of the connection.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getRemoteCallTimeoutMs()">getRemoteCallTimeoutMs</a></strong>()</code>
+<div class="block">Gets the remote call timeout value, in milliseconds.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>Message</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getResponse()">getResponse</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../com/deltavsoft/rcfproto/SslImplementation.html" title="enum in com.deltavsoft.rcfproto">SslImplementation</a></code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getSslImplementation()">getSslImplementation</a></strong>()</code>
+<div class="block">Gets the SSL implementation.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../com/deltavsoft/rcfproto/TransportProtocol.html" title="enum in com.deltavsoft.rcfproto">TransportProtocol</a></code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getTransportProtocol()">getTransportProtocol</a></strong>()</code>
+<div class="block">Gets the transport protocol being used by the channel.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../com/deltavsoft/rcfproto/TransportType.html" title="enum in com.deltavsoft.rcfproto">TransportType</a></code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getTransportType()">getTransportType</a></strong>()</code>
+<div class="block">Returns the transport type of the connection.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#getUsername()">getUsername</a></strong>()</code>
+<div class="block">Returns the Windows username to use when connecting.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setAsynchronousRpcMode(boolean)">setAsynchronousRpcMode</a></strong>(boolean&nbsp;enable)</code>
+<div class="block">Sets the asynchronous RPC mode.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setCaCertificate(com.deltavsoft.rcfproto.Certificate)">setCaCertificate</a></strong>(<a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a>&nbsp;certificatePtr)</code>
+<div class="block">Sets the certificate authority for the channel.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setCertificate(com.deltavsoft.rcfproto.Certificate)">setCertificate</a></strong>(<a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a>&nbsp;certificatePtr)</code>
+<div class="block">Sets the SSL certificate for the channel.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setCertificateValidationCallback(com.deltavsoft.rcfproto.CertificateValidationCallback)">setCertificateValidationCallback</a></strong>(<a href="../../../com/deltavsoft/rcfproto/CertificateValidationCallback.html" title="interface in com.deltavsoft.rcfproto">CertificateValidationCallback</a>&nbsp;certValidationCallback)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setConnectTimeoutMs(long)">setConnectTimeoutMs</a></strong>(long&nbsp;connectTimeoutMs)</code>
+<div class="block">Sets the connect timeout value, in milliseconds.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setEnableCompression(boolean)">setEnableCompression</a></strong>(boolean&nbsp;enableCompression)</code>
+<div class="block">Sets the transport level compression setting for this connection.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setEnableSchannelCertificateValidation(java.lang.String)">setEnableSchannelCertificateValidation</a></strong>(java.lang.String&nbsp;peerName)</code>
+<div class="block">Sets the Schannel certificate validation setting.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setHttpProxy(java.lang.String)">setHttpProxy</a></strong>(java.lang.String&nbsp;httpProxy)</code>
+<div class="block">Sets the network address of the HTTP proxy server, through which to route remote calls.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setHttpProxyPort(int)">setHttpProxyPort</a></strong>(int&nbsp;httpProxyPort)</code>
+<div class="block">Sets the port number of the HTTP proxy server, through which to route remote calls.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setKerberosSpn(java.lang.String)">setKerberosSpn</a></strong>(java.lang.String&nbsp;kerberosSpn)</code>
+<div class="block">Sets the Kerberos SPN to use when connecting.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setOpenSslCipherSuite(java.lang.String)">setOpenSslCipherSuite</a></strong>(java.lang.String&nbsp;cipherSuite)</code>
+<div class="block">Sets the OpenSSL cipher suite.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setPassword(java.lang.String)">setPassword</a></strong>(java.lang.String&nbsp;password)</code>
+<div class="block">Sets the Windows password to use when connecting.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setPingBackIntervalMs(int)">setPingBackIntervalMs</a></strong>(int&nbsp;pingBackIntervalMs)</code>
+<div class="block">Sets the ping back interval of the connection, in milliseconds.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setRemoteCallTimeoutMs(long)">setRemoteCallTimeoutMs</a></strong>(long&nbsp;remoteCallTimeoutMs)</code>
+<div class="block">Sets the remote call timeout value, in milliseconds.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setSslImplementation(com.deltavsoft.rcfproto.SslImplementation)">setSslImplementation</a></strong>(<a href="../../../com/deltavsoft/rcfproto/SslImplementation.html" title="enum in com.deltavsoft.rcfproto">SslImplementation</a>&nbsp;sslImplementation)</code>
+<div class="block">Sets the SSL implementation to be used by the channel.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setTransportProtocol(com.deltavsoft.rcfproto.TransportProtocol)">setTransportProtocol</a></strong>(<a href="../../../com/deltavsoft/rcfproto/TransportProtocol.html" title="enum in com.deltavsoft.rcfproto">TransportProtocol</a>&nbsp;protocol)</code>
+<div class="block">Sets the transport protocol being used by the channel.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#setUsername(java.lang.String)">setUsername</a></strong>(java.lang.String&nbsp;username)</code>
+<div class="block">Sets the Windows username to use when connecting.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../com/deltavsoft/rcfproto/RcfProtoChannel.html#startCancel()">startCancel</a></strong>()</code>
+<div class="block">Advises the RPC system that the caller desires that the RPC call be canceled.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RcfProtoChannel(com.deltavsoft.rcfproto.Endpoint)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RcfProtoChannel</h4>
+<pre>public&nbsp;RcfProtoChannel(<a href="../../../com/deltavsoft/rcfproto/Endpoint.html" title="class in com.deltavsoft.rcfproto">Endpoint</a>&nbsp;endpoint)</pre>
+<div class="block">Constructs a RPC channel from an endpoint.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="callMethod(MethodDescriptor, RpcController, Message, Message, )">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>callMethod</h4>
+<pre>public&nbsp;void&nbsp;callMethod(MethodDescriptor&nbsp;method,
+              RpcController&nbsp;controller,
+              Message&nbsp;request,
+              Message&nbsp;responsePrototype,
+              <any>&nbsp;done)</pre>
+</li>
+</ul>
+<a name="getResponse()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getResponse</h4>
+<pre>public&nbsp;Message&nbsp;getResponse()</pre>
+</li>
+</ul>
+<a name="setCertificateValidationCallback(com.deltavsoft.rcfproto.CertificateValidationCallback)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCertificateValidationCallback</h4>
+<pre>public&nbsp;void&nbsp;setCertificateValidationCallback(<a href="../../../com/deltavsoft/rcfproto/CertificateValidationCallback.html" title="interface in com.deltavsoft.rcfproto">CertificateValidationCallback</a>&nbsp;certValidationCallback)</pre>
+</li>
+</ul>
+<a name="getCertificateValidationCallback()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCertificateValidationCallback</h4>
+<pre>public&nbsp;<a href="../../../com/deltavsoft/rcfproto/CertificateValidationCallback.html" title="interface in com.deltavsoft.rcfproto">CertificateValidationCallback</a>&nbsp;getCertificateValidationCallback()</pre>
+</li>
+</ul>
+<a name="finalize()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>finalize</h4>
+<pre>protected&nbsp;void&nbsp;finalize()</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code>finalize</code>&nbsp;in class&nbsp;<code>java.lang.Object</code></dd>
+</dl>
+</li>
+</ul>
+<a name="delete()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>delete</h4>
+<pre>public&nbsp;void&nbsp;delete()</pre>
+</li>
+</ul>
+<a name="failed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>failed</h4>
+<pre>public&nbsp;boolean&nbsp;failed()</pre>
+<div class="block">After a call has finished, returns true if the call failed.  The possible reasons for failure depend on the RPC implementation.  Failed() must not be called before a call has finished.  If Failed() returns true, the contents of the response message are undefined.</div>
+</li>
+</ul>
+<a name="errorText()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>errorText</h4>
+<pre>public&nbsp;java.lang.String&nbsp;errorText()</pre>
+<div class="block">If Failed() is true, returns a human-readable description of the error.</div>
+</li>
+</ul>
+<a name="startCancel()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>startCancel</h4>
+<pre>public&nbsp;void&nbsp;startCancel()</pre>
+<div class="block">Advises the RPC system that the caller desires that the RPC call be canceled.  The RPC system may cancel it immediately, may wait awhile and then cancel it, or may not even cancel the call at all.  If the call is canceled, the "done" callback will still be called and the RpcController will indicate that the call failed at that time.</div>
+</li>
+</ul>
+<a name="completed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>completed</h4>
+<pre>public&nbsp;boolean&nbsp;completed()</pre>
+</li>
+</ul>
+<a name="connect()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>connect</h4>
+<pre>public&nbsp;void&nbsp;connect()</pre>
+<div class="block">Connects to the server.</div>
+</li>
+</ul>
+<a name="disconnect()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>disconnect</h4>
+<pre>public&nbsp;void&nbsp;disconnect()</pre>
+<div class="block">Disconencts from the server.</div>
+</li>
+</ul>
+<a name="setRemoteCallTimeoutMs(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRemoteCallTimeoutMs</h4>
+<pre>public&nbsp;void&nbsp;setRemoteCallTimeoutMs(long&nbsp;remoteCallTimeoutMs)</pre>
+<div class="block">Sets the remote call timeout value, in milliseconds.</div>
+</li>
+</ul>
+<a name="getRemoteCallTimeoutMs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRemoteCallTimeoutMs</h4>
+<pre>public&nbsp;long&nbsp;getRemoteCallTimeoutMs()</pre>
+<div class="block">Gets the remote call timeout value, in milliseconds.</div>
+</li>
+</ul>
+<a name="setConnectTimeoutMs(long)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setConnectTimeoutMs</h4>
+<pre>public&nbsp;void&nbsp;setConnectTimeoutMs(long&nbsp;connectTimeoutMs)</pre>
+<div class="block">Sets the connect timeout value, in milliseconds.</div>
+</li>
+</ul>
+<a name="getConnectTimeoutMs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getConnectTimeoutMs</h4>
+<pre>public&nbsp;long&nbsp;getConnectTimeoutMs()</pre>
+<div class="block">Gets the connect timeout value, in milliseconds.</div>
+</li>
+</ul>
+<a name="setTransportProtocol(com.deltavsoft.rcfproto.TransportProtocol)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTransportProtocol</h4>
+<pre>public&nbsp;void&nbsp;setTransportProtocol(<a href="../../../com/deltavsoft/rcfproto/TransportProtocol.html" title="enum in com.deltavsoft.rcfproto">TransportProtocol</a>&nbsp;protocol)</pre>
+<div class="block">Sets the transport protocol being used by the channel.</div>
+</li>
+</ul>
+<a name="getTransportProtocol()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTransportProtocol</h4>
+<pre>public&nbsp;<a href="../../../com/deltavsoft/rcfproto/TransportProtocol.html" title="enum in com.deltavsoft.rcfproto">TransportProtocol</a>&nbsp;getTransportProtocol()</pre>
+<div class="block">Gets the transport protocol being used by the channel.</div>
+</li>
+</ul>
+<a name="setAsynchronousRpcMode(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAsynchronousRpcMode</h4>
+<pre>public&nbsp;void&nbsp;setAsynchronousRpcMode(boolean&nbsp;enable)</pre>
+<div class="block">Sets the asynchronous RPC mode. By default the asynchronous RPC mode is false.</div>
+</li>
+</ul>
+<a name="getAsynchronousRpcMode()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAsynchronousRpcMode</h4>
+<pre>public&nbsp;boolean&nbsp;getAsynchronousRpcMode()</pre>
+<div class="block">Gets the asynchronous RPC mode.</div>
+</li>
+</ul>
+<a name="setPingBackIntervalMs(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPingBackIntervalMs</h4>
+<pre>public&nbsp;void&nbsp;setPingBackIntervalMs(int&nbsp;pingBackIntervalMs)</pre>
+<div class="block">Sets the ping back interval of the connection, in milliseconds. Ping backs are sent from the server back to the client, while a remote call is in progress.</div>
+</li>
+</ul>
+<a name="getPingBackIntervalMs()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPingBackIntervalMs</h4>
+<pre>public&nbsp;int&nbsp;getPingBackIntervalMs()</pre>
+<div class="block">Returns the ping back interval of the connection.</div>
+</li>
+</ul>
+<a name="setHttpProxy(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHttpProxy</h4>
+<pre>public&nbsp;void&nbsp;setHttpProxy(java.lang.String&nbsp;httpProxy)</pre>
+<div class="block">Sets the network address of the HTTP proxy server, through which to route remote calls. Only valid when using a HTTP or HTTPS endpoint.</div>
+</li>
+</ul>
+<a name="getHttpProxy()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHttpProxy</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getHttpProxy()</pre>
+<div class="block">Returns the network address of the HTTP proxy server.</div>
+</li>
+</ul>
+<a name="setHttpProxyPort(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHttpProxyPort</h4>
+<pre>public&nbsp;void&nbsp;setHttpProxyPort(int&nbsp;httpProxyPort)</pre>
+<div class="block">Sets the port number of the HTTP proxy server, through which to route remote calls. Only valid when using a HTTP or HTTPS endpoint.</div>
+</li>
+</ul>
+<a name="getHttpProxyPort()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHttpProxyPort</h4>
+<pre>public&nbsp;int&nbsp;getHttpProxyPort()</pre>
+<div class="block">Returns the port number of the HTTP proxy server.</div>
+</li>
+</ul>
+<a name="getTransportType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTransportType</h4>
+<pre>public&nbsp;<a href="../../../com/deltavsoft/rcfproto/TransportType.html" title="enum in com.deltavsoft.rcfproto">TransportType</a>&nbsp;getTransportType()</pre>
+<div class="block">Returns the transport type of the connection.</div>
+</li>
+</ul>
+<a name="setUsername(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setUsername</h4>
+<pre>public&nbsp;void&nbsp;setUsername(java.lang.String&nbsp;username)</pre>
+<div class="block">Sets the Windows username to use when connecting. Only valid for NTLM and Kerberos transport protocols.</div>
+</li>
+</ul>
+<a name="getUsername()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getUsername</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getUsername()</pre>
+<div class="block">Returns the Windows username to use when connecting.</div>
+</li>
+</ul>
+<a name="setPassword(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPassword</h4>
+<pre>public&nbsp;void&nbsp;setPassword(java.lang.String&nbsp;password)</pre>
+<div class="block">Sets the Windows password to use when connecting. Only valid for NTLM and Kerberos transport protocols.</div>
+</li>
+</ul>
+<a name="getPassword()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPassword</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getPassword()</pre>
+<div class="block">Returns the Windows password to use when connecting.</div>
+</li>
+</ul>
+<a name="setKerberosSpn(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setKerberosSpn</h4>
+<pre>public&nbsp;void&nbsp;setKerberosSpn(java.lang.String&nbsp;kerberosSpn)</pre>
+<div class="block">Sets the Kerberos SPN to use when connecting. Only valid for Kerberos transport protocols.</div>
+</li>
+</ul>
+<a name="getKerberosSpn()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getKerberosSpn</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getKerberosSpn()</pre>
+<div class="block">Returns the Kerberos SPN to use when connecting.</div>
+</li>
+</ul>
+<a name="setEnableCompression(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEnableCompression</h4>
+<pre>public&nbsp;void&nbsp;setEnableCompression(boolean&nbsp;enableCompression)</pre>
+<div class="block">Sets the transport level compression setting for this connection.</div>
+</li>
+</ul>
+<a name="getEnableCompression()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEnableCompression</h4>
+<pre>public&nbsp;boolean&nbsp;getEnableCompression()</pre>
+<div class="block">Returns the transport level compression setting for this connection.</div>
+</li>
+</ul>
+<a name="setCertificate(com.deltavsoft.rcfproto.Certificate)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCertificate</h4>
+<pre>public&nbsp;void&nbsp;setCertificate(<a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a>&nbsp;certificatePtr)</pre>
+<div class="block">Sets the SSL certificate for the channel.</div>
+</li>
+</ul>
+<a name="getCertificate()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCertificate</h4>
+<pre>public&nbsp;<a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a>&nbsp;getCertificate()</pre>
+<div class="block">Gets the SSL certificate for the channel.</div>
+</li>
+</ul>
+<a name="setCaCertificate(com.deltavsoft.rcfproto.Certificate)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setCaCertificate</h4>
+<pre>public&nbsp;void&nbsp;setCaCertificate(<a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a>&nbsp;certificatePtr)</pre>
+<div class="block">Sets the certificate authority for the channel.</div>
+</li>
+</ul>
+<a name="getCaCertificate()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCaCertificate</h4>
+<pre>public&nbsp;<a href="../../../com/deltavsoft/rcfproto/Certificate.html" title="class in com.deltavsoft.rcfproto">Certificate</a>&nbsp;getCaCertificate()</pre>
+<div class="block">Gets the certificate authority for the channel.</div>
+</li>
+</ul>
+<a name="setOpenSslCipherSuite(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOpenSslCipherSuite</h4>
+<pre>public&nbsp;void&nbsp;setOpenSslCipherSuite(java.lang.String&nbsp;cipherSuite)</pre>
+<div class="block">Sets the OpenSSL cipher suite. Only applicable when using OpenSSL as the SSL implementation.</div>
+</li>
+</ul>
+<a name="getOpenSslCipherSuite()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOpenSslCipherSuite</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getOpenSslCipherSuite()</pre>
+<div class="block">Gets the OpenSSL cipher suite.</div>
+</li>
+</ul>
+<a name="setEnableSchannelCertificateValidation(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setEnableSchannelCertificateValidation</h4>
+<pre>public&nbsp;void&nbsp;setEnableSchannelCertificateValidation(java.lang.String&nbsp;peerName)</pre>
+<div class="block">Sets the Schannel certificate validation setting. Only applicable when using Schannel as the SSL implementation. If this setting is non-empty, it will be used by Schannel to automatically validate peer certificates.</div>
+</li>
+</ul>
+<a name="getEnableSchannelCertificateValidation()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEnableSchannelCertificateValidation</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getEnableSchannelCertificateValidation()</pre>
+<div class="block">Gets the Schannel certificate validation setting.</div>
+</li>
+</ul>
+<a name="setSslImplementation(com.deltavsoft.rcfproto.SslImplementation)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSslImplementation</h4>
+<pre>public&nbsp;void&nbsp;setSslImplementation(<a href="../../../com/deltavsoft/rcfproto/SslImplementation.html" title="enum in com.deltavsoft.rcfproto">SslImplementation</a>&nbsp;sslImplementation)</pre>
+<div class="block">Sets the SSL implementation to be used by the channel.</div>
+</li>
+</ul>
+<a name="getSslImplementation()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getSslImplementation</h4>
+<pre>public&nbsp;<a href="../../../com/deltavsoft/rcfproto/SslImplementation.html" title="enum in com.deltavsoft.rcfproto">SslImplementation</a>&nbsp;getSslImplementation()</pre>
+<div class="block">Gets the SSL implementation.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../com/deltavsoft/rcfproto/package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+<li><a href="../../../help-doc.html">Help</a></li>
+</ul>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../com/deltavsoft/rcfproto/RCFProto.html" title="class in com.deltavsoft.rcfproto"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../com/deltavsoft/rcfproto/RcfProtoController.html" title="class in com.deltavsoft.rcfproto"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../index.html?com/deltavsoft/rcfproto/RcfProtoChannel.html" target="_top">Frames</a></li>
+<li><a href="RcfProtoChannel.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

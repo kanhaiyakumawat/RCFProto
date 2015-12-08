@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delta V Software - RCFProto Library</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../asset/js/jquery.js"></script>
+	<script src="../asset/js/bootstrap.min.js"></script>
+	<script src="../asset/js/prettify.min.js"></script>	
+	<script src="../asset/js/ko.js"></script>
+	<script src="../asset/js/ko-ext-template-engine.js"></script>
+
+	<!-- Bootstrap -->
+	<link href="../asset/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/font-awesome.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/prettify.css" rel="stylesheet" media="screen">
+<link href="../asset/css/site.css"  rel="stylesheet" media="screen"> />
+			
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="container">
+
+		<br />
+		<br />
+		<div class="row">
+			<div class="span3 affix">
+				<img src='../asset/DVSLogo.png'> </img>
+			</div>
+
+			<div id="top_navigation"></div>
+
+	
+
+
+		</div>
+
+
+		<!-- Docs nav
+    ================================================== -->
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix">
+					<li><a href="#overview"><i class="icon-chevron-right"></i>RCFProto Java Demo</a></li>
+					<li><a href="#building"><i class="icon-chevron-right"></i>Building</a></li>
+                    <li><a href="#running"><i class="icon-chevron-right"></i>Running</a></li>
+				</ul>
+			</div>
+
+			<div class="span9">
+
+				<section id="overview">
+					<h3>RCFProto Java Demo</h3>
+					This section describes how to build and run the RCFProto Java demo server and client, on Windows. You will need the Win32 binary distribution to follow these steps.
+				</section>
+
+				<section id="building">
+					<!-- <h3>Java</h3> -->
+					<div class="content">
+                    <h5>Building the Java demo server and client</h5>
+                    <div class="indent-40px" >
+
+                    <ul>
+
+                        <li>From the root directory of the distribution, change directory to the demo directory:
+                        </li>
+						<br />
+                        <code class="prettyprint">cd java\demo
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Generate source code for Protocol Buffer messages:
+                        </li>
+                        <br />
+                        <code class="prettyprint">..\bin\protoc.exe Demo.proto --java_out=.
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Create directory for class files:
+                        </li>
+                        <br />
+                        <code class="prettyprint">mkdir class
+                        </code>
+                        <br />
+                        <br />
+
+
+                        <li>Build demo server and demo client:
+                        </li>
+                        <br />
+                        <code class="prettyprint">javac DemoClient.java DemoServer.java Proto.java DllPathResolver.java -d class -classpath ..\bin\RCFProto.jar;..\bin\Google.ProtocolBuffers.jar
+                        </code>
+                        <br />
+                        <br />
+
+                    </ul>
+                    </div>
+
+                </section>
+                
+                <section id="running">
+
+                    <h5>Running the Java demo server and client</h5>
+                    <div class="indent-40px">
+
+                        <ul>
+
+                        <li>Cd to class directory where the demo server and client have been built to:
+                        </li>
+                        <br />
+                        <code class="prettyprint">cd class
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Run the demo server:
+                        </li>
+                        <br />
+                        <code class="prettyprint">java DemoServer
+                        </code>
+                        <br />
+                        <br />
+
+                        <li>Run the demo client (in a different command prompt):
+                        </li>
+                        <br />
+                        <code class="prettyprint">java DemoClient
+                        </code>
+                        <br />
+                        <br />
+
+                        </ul>
+
+					</div>
+
+                </section>
+
+                </div>
+				<!-- end content -->
+				
+
+				<hr>
+			</div>
+
+		</div>
+		<!-- end row -->
+
+		<div class="footer">
+			<p>&copy; Delta V Software 2013</p>
+		</div>
+	</div>
+	<!-- /container -->
+
+</body>
+
+
+<script>
+	ko.applyBindings(this);
+
+</script>
+
+<script src="../components/menu.js"></script>
+</html>

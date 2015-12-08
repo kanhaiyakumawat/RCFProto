@@ -1,0 +1,8 @@
+
+#include "RCFProtoVersion.hpp"
+
+#ifndef APSTUDIO_INVOKED
+
+RCFPROTO_VERSION_INFO_DLL("RCFProto_NET_impl.dll", "RCFProto .NET binding library.")
+
+#endif    // not APSTUDIO_INVOKED

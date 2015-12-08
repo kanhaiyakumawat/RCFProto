@@ -1,0 +1,165 @@
+
+################################################################################
+### RCFProto Java build
+################################################################################
+
+# Java test target
+
+# We need paths to java and javac executables. FIND_PACKAGE(Java) doesn't distinguish between 
+# 32 and 64 bit runtimes, so on Windows we deduce the paths from the JNI headers, which *do* 
+# distinguish between 32 and 64 bit.
+IF(MSVC AND JNI_FOUND AND NOT Java_JAVAC_EXECUTABLE AND NOT Java_JAVA_EXECUTABLE)
+
+	MESSAGE("Determining Java runtime paths, based on JNI paths, rather than cmake FIND_PACKAGE().")
+
+	LIST(GET JNI_INCLUDE_DIRS 0 JAVA_INCLUDE)
+	SET( Java_JAVAC_EXECUTABLE ${JAVA_INCLUDE}/../bin/javac.exe)
+	SET( Java_JAVA_EXECUTABLE ${JAVA_INCLUDE}/../bin/java.exe)
+	SET( Java_JAR_EXECUTABLE ${JAVA_INCLUDE}/../bin/jar.exe)
+
+ENDIF()
+
+IF(Java_JAVAC_EXECUTABLE AND Java_JAVA_EXECUTABLE AND Java_JAR_EXECUTABLE AND JNI_FOUND )
+
+	FILE(GLOB JAVA_SOURCES_DEMO ${RCFPROTO_ROOT}/java/demo/*.java)
+	FILE(GLOB JAVA_SOURCES_TEST ${RCFPROTO_ROOT}/java/test/Test_*.java)
+	FILE(GLOB JAVA_SOURCES_RCFPROTO_SWIG ${RCFPROTO_ROOT}/java/src/swig/com/deltavsoft/rcfproto/*.java)
+	FILE(GLOB JAVA_SOURCES_RCFPROTO ${RCFPROTO_ROOT}/java/src/manual/com/deltavsoft/rcfproto/*.java)
+
+	# Java uses different class path separator characters for Windows (';') and non-Windows (':').
+	SET(CP1 ${LIBRARY_OUTPUT_PATH}/RCFProto.jar )
+	SET(CP2 ${PROTOBUF_JAVA_CLASS_PATH})
+	SET(CP3 ${RCFPROTO_ROOT}/java/demo )
+	SET(CP4 ${RCFPROTO_ROOT}/java/test )
+	
+	IF(CMAKE_GENERATOR MATCHES "NMake")
+
+		# Windows class path
+		SET(RCFPROTO_CLASSPATH ".\;${CP1}\;${CP2}\;${CP3}\;${CP4}" )
+
+	ELSE()
+
+		# Unix class path
+		SET(RCFPROTO_CLASSPATH ".:${CP1}:${CP2}:${CP3}:${CP4}" )
+
+	ENDIF()
+
+	SET( DEMO_JAVA ${LIBRARY_OUTPUT_PATH}/demo_java )
+
+
+
+	############################################################################
+	# Build RCFProto.jar
+		
+	ADD_CUSTOM_TARGET(
+		RCFProtoJar
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/RCFProto.jar
+		SOURCES				${JAVA_SOURCES_RCFPROTO} ${JAVA_SOURCES_RCFPROTO_SWIG} )
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/RCFProto.jar
+		DEPENDS				${JAVA_SOURCES_RCFPROTO} ${JAVA_SOURCES_RCFPROTO_SWIG}
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/demo_java
+		COMMAND				${Java_JAR_EXECUTABLE} cvf RCFProto.jar -C ${RCFPROTO_ROOT}/java/src/manual . 
+		COMMAND				${Java_JAR_EXECUTABLE} uvf RCFProto.jar -C ${RCFPROTO_ROOT}/java/src/swig . 
+		COMMAND				${CMAKE_COMMAND} -E make_directory									${RCFPROTO_ROOT}/java/bin
+		COMMAND				${CMAKE_COMMAND} -E copy ${LIBRARY_OUTPUT_PATH}/RCFProto.jar		${RCFPROTO_ROOT}/java/bin
+		WORKING_DIRECTORY	${LIBRARY_OUTPUT_PATH} )
+
+	ADD_DEPENDENCIES(build RCFProtoJar)
+
+
+	############################################################################
+	# Build and run demo server and client.
+
+	ADD_CUSTOM_TARGET( 
+		JavaDemoBuild
+		DEPENDS				${DEMO_JAVA}/DemoClient.class ${DEMO_JAVA}/DemoServer.class
+		SOURCES				${RCFPROTO_ROOT}/java/demo/Demo.proto ${JAVA_SOURCES_DEMO} ${LIBRARY_OUTPUT_PATH}/RCFProto.jar #${LIBRARY_OUTPUT_PATH}/Google.ProtocolBuffers.jar 
+		)
+
+	# Build demo server and client.
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${DEMO_JAVA}/DemoClient.class ${DEMO_JAVA}/DemoServer.class
+		DEPENDS				${RCFPROTO_ROOT}/java/demo/Demo.proto ${JAVA_SOURCES_DEMO} ${LIBRARY_OUTPUT_PATH}/RCFProto.jar #${LIBRARY_OUTPUT_PATH}/Google.ProtocolBuffers.jar
+
+		COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOC_EXECUTABLE} .
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/java/demo/Demo.proto .
+		COMMAND				${PROTOBUF_PROTOC_EXECUTABLE} Demo.proto --java_out=.
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${RCFPROTO_ROOT}/bin/eclipse/proto
+		COMMAND				${CMAKE_COMMAND} -E copy Proto.java ${RCFPROTO_ROOT}/bin/eclipse/proto
+		
+		COMMAND				${Java_JAVAC_EXECUTABLE} ${RCFPROTO_ROOT}/java/demo/DllPathResolver.java ${RCFPROTO_ROOT}/java/demo/DemoClient.java ${RCFPROTO_ROOT}/java/demo/DemoServer.java Proto.java -d ${DEMO_JAVA} -classpath ${RCFPROTO_CLASSPATH}
+
+		WORKING_DIRECTORY	${DEMO_JAVA} )
+
+	ADD_CUSTOM_TARGET( 
+		JavaDemo
+		DEPENDS				${DEMO_JAVA}/DemoClient.stdout.txt 
+		SOURCES				${LIBRARY_OUTPUT_PATH}/RCFProto.jar
+		)
+
+	# Run demo server and client.
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${DEMO_JAVA}/DemoClient.stdout.txt
+		DEPENDS				${DEMO_JAVA}/DemoClient.class ${DEMO_JAVA}/DemoServer.class
+
+		COMMAND				${RUN_ASYNC_PRE} ${Java_JAVA_EXECUTABLE} -classpath ${RCFPROTO_CLASSPATH} DemoServer --dllpath .. ${RUN_ASYNC_POST}
+
+		COMMAND				${Java_JAVA_EXECUTABLE} -classpath ${RCFPROTO_CLASSPATH} DemoClient --dllpath .. --delay 1000 
+		COMMAND				${Java_JAVA_EXECUTABLE} -classpath ${RCFPROTO_CLASSPATH} DemoClient --dllpath .. --shutdown > DemoClient.stdout.txt
+		
+		WORKING_DIRECTORY	${DEMO_JAVA} )
+
+	ADD_DEPENDENCIES(JavaDemo JavaDemoBuild RCFProto_Java_impl RCFProtoJar)
+	ADD_DEPENDENCIES(build JavaDemoBuild)
+	ADD_DEPENDENCIES(demo JavaDemo)
+
+
+
+
+
+
+
+
+
+	############################################################################
+	# Build and run test.
+
+	IF(EXISTS ${RCFPROTO_ROOT}/java/test)
+
+		ADD_CUSTOM_TARGET( 
+			JavaTest
+			DEPENDS				${DEMO_JAVA}/Test_RCFProto.class ${DEMO_JAVA}/RcfProtoTestJava.stdout.txt
+			SOURCES				${RCFPROTO_ROOT}/java/test/ProtoTest.proto ${JAVA_SOURCES_TEST} ${LIBRARY_OUTPUT_PATH}/RCFProto.jar )
+
+		# Build test.
+		ADD_CUSTOM_COMMAND(
+			OUTPUT				${DEMO_JAVA}/Test_RCFProto.class
+			DEPENDS				${RCFPROTO_ROOT}/java/test/ProtoTest.proto ${JAVA_SOURCES_TEST} ${LIBRARY_OUTPUT_PATH}/RCFProto.jar #${LIBRARY_OUTPUT_PATH}/Google.ProtocolBuffers.jar
+
+			COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOC_EXECUTABLE} .
+			COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/java/test/ProtoTest.proto .
+			COMMAND				${PROTOBUF_PROTOC_EXECUTABLE} ProtoTest.proto --java_out=.
+			COMMAND				${CMAKE_COMMAND} -E make_directory ${RCFPROTO_ROOT}/bin/eclipse/proto
+			COMMAND				${CMAKE_COMMAND} -E copy RCFProtoTest.java ${RCFPROTO_ROOT}/bin/eclipse/proto
+			COMMAND				${Java_JAVAC_EXECUTABLE} ${JAVA_SOURCES_TEST} RCFProtoTest.java -d ${DEMO_JAVA} -classpath ${RCFPROTO_CLASSPATH}
+
+			WORKING_DIRECTORY	${DEMO_JAVA} )
+
+		# Run test.
+		ADD_CUSTOM_COMMAND(
+			OUTPUT				${DEMO_JAVA}/RcfProtoTestJava.stdout.txt
+			DEPENDS				${JAVA_SOURCES_TEST} ${JAVA_SOURCES_RCFPROTO} ${JAVA_SOURCES_RCFPROTO_SWIG}
+
+			COMMAND				${Java_JAVA_EXECUTABLE} -classpath ${RCFPROTO_CLASSPATH} Test_RCFProto --dllpath .. > RcfProtoTestJava.stdout.tmp
+			COMMAND				${CMAKE_COMMAND} -E copy RcfProtoTestJava.stdout.tmp RcfProtoTestJava.stdout.txt
+
+			WORKING_DIRECTORY	${DEMO_JAVA} )
+
+		ADD_DEPENDENCIES(JavaTest RCFProto_Java_impl RCFProtoJar)
+		ADD_DEPENDENCIES(test JavaTest)
+
+	ENDIF()
+
+ENDIF()

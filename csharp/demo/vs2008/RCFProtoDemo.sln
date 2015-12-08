@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoClient", "DemoClient\DemoClient.csproj", "{928F3EC9-6586-4B81-BA01-487250F0B755}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73D319EC-DA82-486D-ACA6-0336B189BAA5} = {73D319EC-DA82-486D-ACA6-0336B189BAA5}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoServer", "DemoServer\DemoServer.csproj", "{73D319EC-DA82-486D-ACA6-0336B189BAA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{928F3EC9-6586-4B81-BA01-487250F0B755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{928F3EC9-6586-4B81-BA01-487250F0B755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{928F3EC9-6586-4B81-BA01-487250F0B755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{928F3EC9-6586-4B81-BA01-487250F0B755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D319EC-DA82-486D-ACA6-0336B189BAA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D319EC-DA82-486D-ACA6-0336B189BAA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D319EC-DA82-486D-ACA6-0336B189BAA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D319EC-DA82-486D-ACA6-0336B189BAA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

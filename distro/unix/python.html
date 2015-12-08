@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delta V Software - RCFProto Library</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../asset/js/jquery.js"></script>
+	<script src="../asset/js/bootstrap.min.js"></script>
+	<script src="../asset/js/prettify.min.js"></script>	
+	<script src="../asset/js/ko.js"></script>
+	<script src="../asset/js/ko-ext-template-engine.js"></script>
+
+	<!-- Bootstrap -->
+	<link href="../asset/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/font-awesome.min.css" rel="stylesheet" media="screen">
+	<link href="../asset/css/prettify.css" rel="stylesheet" media="screen">
+	
+	<link href="../asset/css/site.css"  rel="stylesheet" media="screen"> />
+		
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+	<div class="container">
+
+		<br />
+		<br />
+		<div class="row">
+			<div class="span3 affix">
+				<img src='../asset/DVSLogo.png'> </img>
+			</div>
+
+			<div id="top_navigation"></div>
+
+	
+
+
+		</div>
+
+
+		<!-- Docs nav
+    ================================================== -->
+		<div class="row">
+			<div class="span3 bs-docs-sidebar">
+				<ul class="nav nav-list bs-docs-sidenav affix">
+					<li><a href="#overview"><i class="icon-chevron-right"></i>RCFProto Python Demo</a></li>
+					<li><a href="#prerequisites"><i class="icon-chevron-right"></i>Prerequisites</a></li>
+                    <li><a href="#building-rcfproto"><i class="icon-chevron-right"></i>Building RCFProto</a></li>
+                    <li><a href="#installing"><i class="icon-chevron-right"></i>Installing RCFProto</a></li>
+                    <li><a href="#running"><i class="icon-chevron-right"></i>Running</a></li>
+				</ul>
+			</div>
+
+			<div class="span9">
+
+				<section id="overview">
+					<h3>RCFProto Python Demo</h3>
+					This section describes how to build and run the RCFProto Python demo server and client, on Unix platforms. You will need the source distribution to follow these steps.
+				</section>
+
+				<section id="prerequisites">
+					<!-- <h3>Python</h3> -->
+
+                    	<div class="content">
+
+                        <h5>Prerequisites</h5>
+
+                        <div class="indent-40px" >
+
+                        Make sure you have the following prerequisites installed. The commands listed below show how to install the prerequisites on <a href="http://www.ubuntu.com/">Ubuntu Linux</a>.
+                        
+                        <ul>
+                            <br />
+                            <li>C++ compiler (<a href="http://gcc.gnu.org/">g++</a> or similar):</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install g++
+                            </code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://www.cmake.org/">cmake</a>:</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install cmake
+                            </code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://www.boost.org">Boost</a>:</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install libboost-dev
+                            </code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://zlib.net/">zlib</a>:</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install zlib1g-dev
+                            </code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://www.openssl.org/">OpenSSL</a>:</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install libssl-dev
+                            </code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://www.python.org/">Python</a> development libraries:</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install python-dev
+                            </code>
+                            <br />
+                            <br />
+
+                            <li><a href="http://code.google.com/p/protobuf/">Protocol Buffers</a> Python libraries:</li>
+                            <br />
+                            <code class="prettyprint">sudo apt-get install python-protobuf
+                            </code>
+                            <br />
+                            <br />
+
+                        </ul>
+                        </div>
+
+                </section>
+                <section id="building-rcfproto">
+
+                    <h5>Building RCFProto Python bindings</h5>
+
+					<div class="indent-40px">
+                        <ul>
+                            <li>From the root directory of the distribution, run cmake to generate the makefile:
+                            </li>
+                            <br />
+                            <code class="prettyprint">mkdir make
+                            </code>
+                            <br />
+
+                            <br />
+                            <code class="prettyprint">cd make
+                            </code>
+                            <br />
+                            <br />
+                            <code class="prettyprint">cmake -G "Unix Makefiles" ..
+                            </code>
+                            <br />
+                            <br />
+
+                            <li>Run make:
+                            </li>
+                            <br />
+                            <code class="prettyprint">make
+                            </code>
+                            <br />
+                            <br />
+
+                            <li>The <tt>python/bin/x86</tt> or <tt>python/bin/x64</tt> directory should now contain <tt>_rcfproto.so</tt> .</li>
+
+                        </ul>
+                    </div>
+
+                </section>
+
+                <section id="installing">
+
+                    <h5>Installing the RCFProto Python module</h5>
+
+					<div class="indent-40px">
+
+						<ul>
+
+                            <li>From the root directory of the distribution, change directory to the src directory:
+                            </li>
+                            <br />
+                            <code class="prettyprint">cd python/src
+                            </code>
+                            <br />
+                            <br />
+
+                            <li>Install the RCFProto Python module (and Google.ProtocolBuffers, if not already installed)::
+                            </li>
+                            <br />
+                            <code class="prettyprint">python setup.py install
+                            </code>
+                            <br />
+                            <br />
+                            
+						</ul>
+
+                    </div>
+
+                </section>
+
+                <section id="running">
+
+                    <h5>Running the Python demo server and client</h5>
+					<div class="indent-40px">
+
+                        <ul>
+
+                            <li>From the root directory of the distribution, cd to the demo directory: </li>
+                            <br />
+                            <code class="prettyprint">cd python/demo
+                            </code>
+                            <br />
+                            <br />
+
+                            <li>Generate source code for Protocol Buffer messages:</li>
+                            <br />
+                            <code class="prettyprint">protoc Demo.proto --python_out=.
+                            </code>
+                            <br />
+                            <br />
+
+
+                            <li>Run the demo server:
+                            </li>
+                            <br />
+                            <code class="prettyprint">python DemoServer.py
+                            </code>
+                            <br />
+                            <br />
+
+                            <li>Run the demo client (in a different command prompt): 
+                            </li>
+                            <br />
+                            <code class="prettyprint">python DemoClient.py
+                            </code>
+                            <br />
+                            <br />
+
+                        </ul>
+
+                    </div>
+
+                </section>
+
+                </div>
+
+				</div>
+
+				<hr>
+			</div>
+
+		<!-- </div> -->
+		<!-- end row -->
+
+		<div class="footer">
+			<p>&copy; Delta V Software 2013</p>
+		</div>
+	<!-- </div> -->
+	<!-- /container -->
+
+</body>
+
+
+<script>
+	ko.applyBindings(this);
+
+</script>
+
+<script src="../components/menu.js"></script>
+</html>

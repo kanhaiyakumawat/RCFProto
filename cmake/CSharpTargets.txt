@@ -1,0 +1,156 @@
+
+################################################################################
+### RCFProto C# build
+################################################################################
+
+# C# test target
+IF(CSC_EXECUTABLE AND PROTOBUF_NET_DLL_PATH)
+
+	MESSAGE( "Using C# compiler: " ${CSC_EXECUTABLE} )
+	MESSAGE( "Using Protocol Buffers .NET bindings in directory: " ${PROTOBUF_NET_DLL_PATH} )
+
+	# Replace backslashes with forward slashes.
+	STRING(REPLACE "\\" "/" PROTOBUF_NET_DLL_PATH "${PROTOBUF_NET_DLL_PATH}" )	
+
+	# Set target platform (so AnyCPU doesn't decide to run the wrong thing).
+	IF (${ARCH} STREQUAL x86)
+		SET(CSC_PLATFORM_OPTION /platform:x86)
+	ELSE (${ARCH} STREQUAL x86)
+		SET(CSC_PLATFORM_OPTION /platform:x64)
+	ENDIF (${ARCH} STREQUAL x86)
+
+	# RCFProto sources
+	FILE(GLOB CSHARP_SOURCES_RCFPROTO_SWIG ${RCFPROTO_ROOT}/csharp/src/swig/*.cs)
+	FILE(GLOB CSHARP_SOURCES_RCFPROTO ${RCFPROTO_ROOT}/csharp/src/*.cs)
+
+	# Demo sources
+	FILE(GLOB CSHARP_SOURCES_DEMO ${RCFPROTO_ROOT}/csharp/demo/*.cs )
+
+	# Build RCFProto NET DLL.
+	ADD_CUSTOM_TARGET( 
+		RCFProtoNet
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/Google.ProtocolBuffers.dll ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll 
+		SOURCES				${CSHARP_SOURCES_RCFPROTO} ${CSHARP_SOURCES_RCFPROTO_SWIG} )
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/Google.ProtocolBuffers.dll ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll
+		DEPENDS				${PROTOBUF_NET_DLL_PATH}/Google.ProtocolBuffers.dll ${CSHARP_SOURCES_RCFPROTO} ${CSHARP_SOURCES_RCFPROTO_SWIG}
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/demo_cs
+		COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_NET_DLL_PATH}/Google.ProtocolBuffers.dll ${LIBRARY_OUTPUT_PATH}/Google.ProtocolBuffers.dll
+		COMMAND				${CSC_EXECUTABLE} /target:library /out:${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll /r:${LIBRARY_OUTPUT_PATH}\\Google.ProtocolBuffers.dll /doc:${LIBRARY_OUTPUT_PATH}\\RCFProto_NET.xml /nowarn:1591 /debug /recurse:*.cs
+
+		COMMAND				${CMAKE_COMMAND} -E make_directory											${RCFPROTO_ROOT}/csharp/bin
+		COMMAND				${CMAKE_COMMAND} -E copy ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll			${RCFPROTO_ROOT}/csharp/bin
+
+		WORKING_DIRECTORY	${RCFPROTO_ROOT}/csharp/src )
+
+	ADD_DEPENDENCIES(RCFProtoNet RCFProto_NET_impl)
+	ADD_DEPENDENCIES(build RCFProtoNet)
+
+	# Create C# demo dir.
+	ADD_CUSTOM_TARGET(
+		CSharpDemoDir
+		DEPENDS				${LIBRARY_OUTPUT_PATH}/demo_cs/touch
+		SOURCES				${RCFPROTO_ROOT}/CMakeLists.txt)
+
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${LIBRARY_OUTPUT_PATH}/demo_cs/touch
+		DEPENDS				${RCFPROTO_ROOT}/CMakeLists.txt
+		COMMAND				${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}/demo_cs
+		COMMAND				${CMAKE_COMMAND} -E touch ${LIBRARY_OUTPUT_PATH}/demo_cs/touch )
+
+
+	SET( ASSEMBLY_REFS /r:..\\Google.ProtocolBuffers.dll /r:..\\RCFProto_NET.dll )
+	SET( DEMO_SOURCE_DIR ..\\..\\..\\..\\csharp\\demo )
+	SET( DEMO_CS ${LIBRARY_OUTPUT_PATH}/demo_cs )
+
+	SET( CSC ${CSC_EXECUTABLE} ${CSC_PLATFORM_OPTION} ${ASSEMBLY_REFS} /target:exe )
+
+	IF (${CMAKE_BUILD_TYPE} STREQUAL Debug)
+		SET( CSC ${CSC} /debug)
+	ELSE (${CMAKE_BUILD_TYPE} STREQUAL Debug)
+		SET( CSC ${CSC} )
+	ENDIF (${CMAKE_BUILD_TYPE} STREQUAL Debug)
+
+	# Build C# demo server and client.
+	ADD_CUSTOM_TARGET( 
+		CSharpDemoBuild
+		DEPENDS				${DEMO_CS}/Demo.cs ${DEMO_CS}/DemoClientCs.exe ${DEMO_CS}/DemoServerCs.exe
+		SOURCES				${RCFPROTO_ROOT}/csharp/demo/Demo.proto ${CSHARP_SOURCES_DEMO} ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll )
+
+	# Compile C# demo client and server.
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${DEMO_CS}/Demo.cs ${DEMO_CS}/DemoClientCs.exe ${DEMO_CS}/DemoServerCs.exe
+		DEPENDS				${RCFPROTO_ROOT}/csharp/demo/Demo.proto ${CSHARP_SOURCES_DEMO} ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll
+		
+		COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOGEN_EXECUTABLE} .
+		COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/csharp/demo/Demo.proto .
+		COMMAND				${PROTOBUF_PROTOGEN_EXECUTABLE} Demo.proto -service_generator_type=GENERIC -output_directory=.
+		COMMAND				${CSC} /out:DemoClientCs.exe ${DEMO_SOURCE_DIR}\\DllPathResolver.cs ${DEMO_SOURCE_DIR}\\DemoClient.cs Demo.cs
+		COMMAND				${CSC} /out:DemoServerCs.exe ${DEMO_SOURCE_DIR}\\DllPathResolver.cs ${DEMO_SOURCE_DIR}\\DemoServer.cs Demo.cs
+		WORKING_DIRECTORY	${DEMO_CS} )
+
+
+	# Run C# demo server and client.
+	ADD_CUSTOM_TARGET( 
+		CSharpDemo
+		DEPENDS				${DEMO_CS}/DemoClient.stdout.txt
+		SOURCES				${DEMO_CS}/DemoClientCs.exe ${DEMO_CS}/DemoServerCs.exe ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll )
+
+	# Run C# demo client and server.
+	ADD_CUSTOM_COMMAND(
+		OUTPUT				${DEMO_CS}/DemoClient.stdout.txt
+		DEPENDS				${DEMO_CS}/DemoClientCs.exe ${DEMO_CS}/DemoServerCs.exe
+
+		COMMAND				start /b DemoServerCs.exe --dllpath ..
+		COMMAND				DemoClientCs.exe --dllpath .. --delay 1000
+		COMMAND				DemoClientCs.exe --dllpath .. --shutdown > ${DEMO_CS}/DemoClient.stdout.txt
+		WORKING_DIRECTORY	${DEMO_CS} )
+
+	ADD_DEPENDENCIES(CSharpDemo RCFProtoNet CSharpDemoDir CSharpDemoBuild)
+	ADD_DEPENDENCIES(build CSharpDemoBuild)	
+	ADD_DEPENDENCIES(demo CSharpDemo)	
+
+
+	# C# test targets
+
+	IF(EXISTS ${RCFPROTO_ROOT}/csharp/test)
+
+		# Test sources
+		FILE(GLOB CSHARP_SOURCES_TEST ${RCFPROTO_ROOT}/csharp/test/*.cs )
+
+		SET( TEST_SOURCE_DIR ..\\..\\..\\..\\csharp\\test )
+
+		# Build and run C# test harness.
+		ADD_CUSTOM_TARGET(
+			CSharpTest
+			DEPENDS				${DEMO_CS}/ProtoTest.cs ${DEMO_CS}/RcfProtoTestCs.exe ${DEMO_CS}/RcfProtoTestCs.stdout.txt
+			SOURCES				${RCFPROTO_ROOT}/csharp/test/ProtoTest.proto ${CSHARP_SOURCES_TEST} ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll )
+
+		# Build C# test harness.
+		ADD_CUSTOM_COMMAND(
+			OUTPUT				${DEMO_CS}/ProtoTest.cs ${DEMO_CS}/RcfProtoTestCs.exe
+			DEPENDS				${RCFPROTO_ROOT}/csharp/test/ProtoTest.proto ${CSHARP_SOURCES_TEST} ${LIBRARY_OUTPUT_PATH}/RCFProto_NET.dll
+		
+			COMMAND				${CMAKE_COMMAND} -E copy ${PROTOBUF_PROTOGEN_EXECUTABLE} .
+			COMMAND				${CMAKE_COMMAND} -E copy ${RCFPROTO_ROOT}/csharp/test/ProtoTest.proto .
+			COMMAND				${PROTOBUF_PROTOGEN_EXECUTABLE} ProtoTest.proto -service_generator_type=GENERIC -output_directory=.
+			COMMAND				${CSC} /out:RcfProtoTestCs.exe ${DEMO_SOURCE_DIR}\\DllPathResolver.cs ${TEST_SOURCE_DIR}\\Test_RCFProto.cs ProtoTest.cs
+			WORKING_DIRECTORY	${DEMO_CS} )
+
+		# Run C# test harness.
+		ADD_CUSTOM_COMMAND(
+			OUTPUT				${DEMO_CS}/RcfProtoTestCs.stdout.txt
+			DEPENDS				${DEMO_CS}/RcfProtoTestCs.exe
+
+			COMMAND				RcfProtoTestCs.exe --dllpath .. > RcfProtoTestCs.stdout.tmp
+			COMMAND				${CMAKE_COMMAND} -E copy RcfProtoTestCs.stdout.tmp RcfProtoTestCs.stdout.txt
+			WORKING_DIRECTORY	${DEMO_CS} )
+
+		ADD_DEPENDENCIES(CSharpTest RCFProtoNet CSharpDemoDir)
+		ADD_DEPENDENCIES(test CSharpTest)	
+
+	ENDIF()
+
+
+ENDIF()
